@@ -30,6 +30,10 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("n", "<C-O>", ":ClangdSwitchSourceHeader<CR>", opts)
     vim.keymap.set('n', '<leader>pp', function () vim.diagnostic.open_float() end, opts)
 
+    if client.server_capabilities.documentSymbolProvider then
+        require('nvim-navic').attach(client, bufnr)
+    end
+
 end)
 
 lsp.set_sign_icons({

@@ -38,6 +38,16 @@ require("lualine").setup{
         lualine_y = {},
         lualine_z = {},
     },
+    winbar = {
+        lualine_c = {
+            {
+                "navic",
+                color = 'lualine_b_normal',
+                color_correction = nil,
+                navic_opts = nil
+            }
+        }
+    },
     globalstatus = true,
 
 }

@@ -79,6 +79,10 @@ return packer.startup(function(use)
             {"onsails/lspkind.nvim"}
         }
     }
+    use {
+        "SmiteshP/nvim-navic",
+        requires = "neovim/nvim-lspconfig"
+    }
 
     use {'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async'}
 
