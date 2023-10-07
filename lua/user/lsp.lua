@@ -56,7 +56,7 @@ lsp.set_server_config({
 })
 
 require('lspconfig').clangd.setup{
-    cmd={"clangd", "--background-index", "--clang-tidy", "--completion-style=bundled", "--header-insertion=iwyu", "--suggest-missing-includes", "--cross-file-rename", "--enable-config", "--limit-results=0", "--header-insertion-decorators", "-j=8", "--folding-ranges"}
+    cmd={"clangd", "--background-index", "--clang-tidy", "--completion-style=bundled", "--header-insertion=never", "--suggest-missing-includes", "--cross-file-rename", "--enable-config", "--limit-results=0", "--header-insertion-decorators", "-j=8", "--folding-ranges"}
 }
 
 lsp.setup()
