@@ -43,7 +43,10 @@ return packer.startup(function(use)
     use "nvim-tree/nvim-web-devicons"
     --use {"akinsho/bufferline.nvim", tag = "v3.*" }
 
-
+    use {
+      'mrded/nvim-lsp-notify',
+      requires = { 'rcarriga/nvim-notify' },
+    }
     use "ap/vim-css-color"
 
     use "folke/which-key.nvim"

@@ -15,5 +15,6 @@ require("user.ufo")
 require("user.lsp")
 require("user.nvim_tree")
 require("user.spider")
+require("user.notify")
 
 vim.cmd "colorscheme monokai"
