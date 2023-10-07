@@ -332,6 +332,9 @@ call s:h("CmpSelect",                   { "fg": s:black, "bg": s:blue})
 hi! link NormalFloat CmpMenu
 hi! link FloatBorder CmpMenu
 
+call s:h("IblIndent",         { "fg": s:darkgrey})
+call s:h("IblWhitespace",    { "fg": s:darkgrey})
+call s:h("IblScope", { "fg": s:darkgrey})
 " Terminal Colors
 " ---------------
 if has('nvim')
