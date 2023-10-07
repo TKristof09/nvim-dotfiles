@@ -1,6 +1,7 @@
 require("telescope").setup{
     defaults = {
         path_display = {"shorten"},
+        dynamic_preview_title = true
     },
 }
 require("telescope").load_extension("ui-select")
