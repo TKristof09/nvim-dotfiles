@@ -89,8 +89,12 @@ return packer.startup(function(use)
 
     use {'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async'}
 
-
+    use {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        requires = { {"nvim-lua/plenary.nvim"} }
+    }
     use "TKristof09/vim-vulkan-ref"
-
+    use "ThePrimeagen/vim-be-good"
 end
 )

@@ -1,6 +1,6 @@
 local diagnostics = {
     "diagnostics",
-    sources = { "coc" },
+    sources = { "nvim_lsp" },
     sections = { "error", "warn" },
     symbols = { error = " ", warn = " " },
     update_in_insert = false,
