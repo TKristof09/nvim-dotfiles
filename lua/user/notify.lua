@@ -58,6 +58,7 @@ vim.lsp.handlers["$/progress"] = function(_, result, ctx)
 
  local notif_data = get_notif_data(client_id, result.token)
 
+ if vim.lsp.get_client_by_id(client_id).name == "pylsp" then return end
  if val.kind == "begin" then
    local message = format_message(val.message, val.percentage)
 
@@ -95,5 +96,5 @@ local severity = {
   "info", -- map both hint and info to info?
 }
 vim.lsp.handlers["window/showMessage"] = function(err, method, params, client_id)
-             vim.notify(method.message, severity[params.type])
+    vim.notify(method.message, severity[params.type])
 end

@@ -1,13 +1,13 @@
 local lsp = require('lsp-zero').preset("minimal")
 local lsp_signature = require("lsp_signature")
 
-lsp_signature.setup({
-    bind = true,
-    handler_opts = {
-        border = "single"
-    },
-    select_signature_key = "<M-n>"
-})
+-- lsp_signature.setup({
+--     bind = true,
+--     handler_opts = {
+--         border = "single"
+--     },
+--     select_signature_key = "<M-n>"
+-- })
 
 lsp.ensure_installed({
     'clangd',
@@ -35,33 +35,75 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.set_sign_icons({
-  error = '✘',
-  warn = '▲',
-  hint = '⚑',
-  info = '»'
+    error = '✘',
+    warn = '▲',
+    hint = '⚑',
+    info = '»'
 })
 
 lsp.set_server_config({
-  capabilities = {
-    textDocument = {
-      foldingRange = {
-        dynamicRegistration = false,
-        lineFoldingOnly = true
-      }
-    },
-    general = {
-      positionEncodings = { 'utf-16' },
+    capabilities = {
+        textDocument = {
+            foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true
+            }
+        },
+        offsetEncoding = {'utf-16'}
     },
     offsetEncoding = {'utf-16'}
-  },
-  offsetEncoding = {'utf-16'}
 })
 
-require('lspconfig').clangd.setup{
-    cmd={"clangd", "--background-index", "--clang-tidy", "--completion-style=bundled", "--header-insertion=never", "--suggest-missing-includes", "--cross-file-rename", "--enable-config", "--limit-results=0", "--header-insertion-decorators", "-j=8", "--folding-ranges"}
-}
 
-require('lspconfig').glsl_analyzer.setup{}
+require('mason-lspconfig').setup({
+    ensure_installed = {},
+    handlers = {
+        lsp.default_setup,
+        clangd = function()
+            require('lspconfig').clangd.setup{
+                cmd={"clangd", "--background-index", "--clang-tidy", "--completion-style=bundled", "--header-insertion=never", "--suggest-missing-includes", "--cross-file-rename", "--enable-config", "--limit-results=0", "--header-insertion-decorators", "-j=8", "--folding-ranges"}
+            }
+        end,
+        rust_analyzer = function()
+            require('lspconfig').rust_analyzer.setup{
+                ["rust-analyzer"] = {
+                    settings = {
+                        numThreads = 8,
+                        completion = {
+                            limit = 50,
+                            postfix = {
+                                enable = false
+                            },
+                        }
+                    },
+                    checkOnSave = {
+                        command = "clippy",
+                        extraArgs = {
+                            "--target-dir=target/analyzer"
+                        }
+                    },
+                }
+            }
+        end,
+        pylsp = function ()
+            require('lspconfig').pylsp.setup{
+                settings = {
+                    pylsp = {
+                        plugins = {
+                            pycodestyle = {
+                                enabled = false
+                            },
+                        }
+                    }
+                }
+            }
+
+        end
+    },
+})
+
+
+
 
 
 lsp.setup()
@@ -72,13 +114,13 @@ local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
 local cmp_mappings = lsp.defaults.cmp_mappings({
-    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-    ['<CR>'] = cmp.mapping.confirm({ select = false, behavior = cmp.ConfirmBehavior.Replace }),
-    ["<C-Space>"] = cmp.mapping.complete(),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-        -- Navigate between snippet placeholder
+    ['<C-l>'] = cmp.mapping.select_prev_item(cmp_select),
+    ['<C-d>'] = cmp.mapping.select_next_item(cmp_select),
+    ['<C-w>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }),
+    ["<C-n>"] = cmp.mapping.complete(),
+    ['<C-x>'] = cmp.mapping.scroll_docs(4),
+    ['<C-m>'] = cmp.mapping.scroll_docs(-4),
+    -- Navigate between snippet placeholder
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 })
@@ -101,11 +143,71 @@ cmp.setup({
 
         })
     },
-    sources = {
-        {name = 'nvim_lsp'},
-        {name = 'nvim_lua'},
-    },
+    sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+
+    }),
     mapping = cmp_mappings,
 })
+cmp.setup.filetype("lua",{
+    mapping = cmp_mappings,
+    sources = cmp.config.sources({
+        { name = 'nvim_lua' },
+        { name = 'nvim_lsp' },
+    })
+})
 
+
+-- for some reason normal mappings don't work in cmdline
+local cmp_cmdline_mappings =cmp.mapping.preset.cmdline({
+    ['<C-l>'] = {
+        c = function()
+            local cmp = require('cmp')
+            if cmp.visible() then
+                cmp.select_prev_item()
+            else
+                cmp.complete()
+            end
+        end,
+    },
+    ['<C-d>'] = {
+        c = function()
+            local cmp = require('cmp')
+            if cmp.visible() then
+                cmp.select_next_item()
+            else
+                cmp.complete()
+            end
+        end,
+    },
+    ['<C-w>'] = {
+        c = function()
+            local cmp = require('cmp')
+            if cmp.visible() then
+                cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace })
+            else
+                cmp.complete()
+            end
+        end,
+    },
+})
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ '/', '?' }, {
+    mapping = cmp_cmdline_mappings,
+    sources = {
+        { name = 'buffer' }
+    }
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+    mapping = cmp_cmdline_mappings,
+    sources = cmp.config.sources({
+        { name = 'path' },
+        { name = 'cmdline',
+            option = {
+                ignore_cmds = { '!' }
+            }}
+    })
+})
 

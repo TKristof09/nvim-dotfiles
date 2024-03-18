@@ -15,18 +15,12 @@ vim.cmd [[
         autocmd InsertEnter * call ToggleRelativeOn()
         autocmd InsertLeave * call ToggleRelativeOn()
     augroup END
-
-
-
-	autocmd BufWinEnter,WinEnter term://* startinsert
-
-
 ]]
 
 -- format on save autocmd
 vim.api.nvim_create_autocmd({"BufWritePre"},
 {
-    pattern = {"*.cpp", "*.c", "*.h", "*.hpp"},
+    pattern = {"*.cpp", "*.c", "*.h", "*.hpp", "*.rs"},
     callback = function() vim.lsp.buf.format() end
 })
 
@@ -34,6 +28,36 @@ vim.api.nvim_create_autocmd({"BufWritePre"},
 vim.api.nvim_create_autocmd({"FocusLost"},
 {
     pattern = {"*"},
-    command = ":wa"
+    command = "wa"
 })
 
+vim.api.nvim_create_autocmd({"TermOpen"},
+{
+    pattern = {"*"},
+    callback = function()
+        vim.opt_local.number = false
+vim.opt_local.modified = false
+    end
+})
+
+vim.api.nvim_create_autocmd({"InsertEnter"},
+{
+    pattern = {"*"},
+    callback = function()
+            vim.opt.hlsearch = false
+    end
+})
+vim.api.nvim_create_autocmd({"CmdlineEnter"},
+{
+    pattern = {"/"},
+    callback = function()
+            vim.opt.hlsearch = true
+    end
+})
+vim.api.nvim_create_autocmd({"CmdlineEnter"},
+{
+    pattern = {"?"},
+    callback = function()
+            vim.opt.hlsearch = true
+    end
+})

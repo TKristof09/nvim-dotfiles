@@ -45,6 +45,11 @@ o.viewoptions:remove({"options"})
 
 o.showtabline = 0
 
+o.showmode = false -- we use lualine for this, so disablig it makes noice only show macro recording in the statusline
+
+
+o.shell = "powershell.exe"
+
 -- disable background color erase
 vim.cmd [[
     if $TERM == "xterm-kitty"
@@ -57,3 +62,5 @@ vim.cmd [[
 		let &t_te = &t_te . "\033]110\007\033]111\007"
 	endif
     ]]
+
+

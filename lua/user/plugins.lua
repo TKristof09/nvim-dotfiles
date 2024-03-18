@@ -36,16 +36,28 @@ return packer.startup(function(use)
     use "wbthomason/packer.nvim" -- have packer update itself
     use "nvim-lua/plenary.nvim"
 
-    use {"nvim-telescope/telescope.nvim", tag = "0.1.0"}
+    use {"nvim-telescope/telescope.nvim"}
     use {'nvim-telescope/telescope-ui-select.nvim' }
 
     use "nvim-tree/nvim-tree.lua"
     use "nvim-tree/nvim-web-devicons"
     --use {"akinsho/bufferline.nvim", tag = "v3.*" }
-
+-- lazy.nvim
     use {
-      'mrded/nvim-lsp-notify',
-      requires = { 'rcarriga/nvim-notify' },
+        "folke/noice.nvim",
+
+        requires = {
+            -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+            "MunifTanjim/nui.nvim",
+            -- OPTIONAL:
+            --   `nvim-notify` is only needed, if you want to use the notification view.
+            --   If not available, we use `mini` as the fallback
+            "rcarriga/nvim-notify",
+        }
+    }
+    use {
+        'mrded/nvim-lsp-notify',
+        requires = { 'rcarriga/nvim-notify' },
     }
     use "ap/vim-css-color"
 
@@ -63,7 +75,6 @@ return packer.startup(function(use)
 
     use "chrisgrieser/nvim-spider"
 
-    --use "windwp/nvim-autopairs"
 
     use {
         'VonHeikemen/lsp-zero.nvim',
@@ -77,6 +88,10 @@ return packer.startup(function(use)
             -- Autocompletion
             {'hrsh7th/nvim-cmp'},     -- Required
             {'hrsh7th/cmp-nvim-lsp'}, -- Required
+            {'hrsh7th/cmp-buffer'},
+            {'hrsh7th/cmp-path'},
+            {'hrsh7th/cmp-nvim-lua'},
+            {'hrsh7th/cmp-cmdline'},
             {'L3MON4D3/LuaSnip'},     -- Required
             {"ray-x/lsp_signature.nvim"},
             {"onsails/lspkind.nvim"}
@@ -94,6 +109,15 @@ return packer.startup(function(use)
         branch = "harpoon2",
         requires = { {"nvim-lua/plenary.nvim"} }
     }
+
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = ':TSUpdate',
+        commit="9d39f00a9559cf3505d73b486c0b8055a6db4215",
+        lock = true,
+    }
+    use "HiPhish/rainbow-delimiters.nvim"
+
     use "TKristof09/vim-vulkan-ref"
     use "ThePrimeagen/vim-be-good"
 end

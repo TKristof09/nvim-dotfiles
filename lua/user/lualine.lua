@@ -11,16 +11,23 @@ local branch = {
     icons_enabled = true,
     icon = "",
 }
-
 require("lualine").setup{
     icons_enabled = true,
     theme = "auto",
-    disabled_filetypes = {"coc-explorer"},
+    disabled_filetypes = {"NvimTree"},
 
     sections = {
         lualine_a = {'mode'},
         lualine_b = {branch, diagnostics},
-        lualine_c = {'filename', 'searchcount'},
+        lualine_c = {
+                'filename',
+                'searchcount',
+                {
+                    require("noice").api.statusline.mode.get,
+                    cond = require("noice").api.statusline.mode.has,
+                    color = { fg = "#ff1818",gui = "bold"},
+                },
+        },
         lualine_x = {'encoding', 'fileformat', 'filetype'},
         lualine_y = {{'tabs',
             tabs_color = {

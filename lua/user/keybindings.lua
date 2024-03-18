@@ -13,26 +13,26 @@ map("n", "<tab>", "%")
 map("v", "p", '"_dP') -- make pasting not yank the text under selection in virtual mode
 
 -- better navigation between split windows
-map("n", "<C-J>", "<C-W><C-J>")
-map("n", "<C-K>", "<C-W><C-K>")
-map("n", "<C-H>", "<C-W><C-H>")
-map("n", "<C-L>", "<C-W><C-L>")
+map("n", "<C-Down>", "<C-W><C-J>")
+map("n", "<C-Up>", "<C-W><C-K>")
+map("n", "<C-Left>", "<C-W><C-H>")
+map("n", "<C-Right>", "<C-W><C-L>")
 
 -- move lines up/down
-map("n", "<M-j>", ":m .+1<CR>==")
-map("n", "<M-k>", ":m .-2<CR>==")
-map("v", "<M-j>", ":m '>+1<CR>gv=gv")
-map("v", "<M-k>", ":m '<-2<CR>gv=gv")
+map("n", "<M-Down>", ":m .+1<CR>==")
+map("n", "<M-Up>", ":m .-2<CR>==")
+map("v", "<M-Down>", ":m '>+1<CR>gv=gv")
+map("v", "<M-Up>", ":m '<-2<CR>gv=gv")
 
 -- resize splits
-map("n", "<C-Right>", ":vertical resize +5<CR>")
-map("n", "<C-Left>", ":vertical resize -5<CR>")
-map("n", "<C-Up>", ":resize +5<CR>")
-map("n", "<C-Down>", ":resize -5<CR>")
+-- map("n", "<C-Right>", ":vertical resize +5<CR>")
+-- map("n", "<C-Left>", ":vertical resize -5<CR>")
+-- map("n", "<C-Up>", ":resize +5<CR>")
+-- map("n", "<C-Down>", ":resize -5<CR>")
 
 -- change buffers
-map("n", "<S-l>", ":bnext<CR>")
-map("n", "<S-h>", ":bprev<CR>")
+map("n", "<S-Right>", ":bnext<CR>")
+map("n", "<S-Left>", ":bprev<CR>")
 
 -- change tabs
 map("n", "<S-u>", ":tabnext<CR>")
@@ -51,3 +51,10 @@ map("n", "<leader>vr", ":OpenRefPage<CR>")
 map("n", "<S-*>", ":nohl<CR>")
 
 map("n", "<S-T>", ":tag<CR>")
+
+map("t", "<Esc>", "<C-\\><C-n>")
+map("n", "<leader>ts", ":split | term<CR>")
+map("n", "<leader>tv", ":vsplit | term<CR>")
+
+map("n", "n", ":set hlsearch<CR>n")
+map("n", "N", ":set hlsearch<CR>N")

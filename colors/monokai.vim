@@ -211,6 +211,11 @@ call s:h("Underlined",    { "fg": s:green })
 call s:h("Ignore",        {})
 call s:h("Error",         { "fg": s:red, "bg": s:darkred })
 
+hi! link @variable Normal
+hi! link @function.builtin Function
+hi! link @constructor Structure
+hi! link @type.python Structure
+
 hi! link @lsp.type.class Structure
 hi! link @lsp.type.variable Normal
 hi! link @lsp.type.paramater Normal
@@ -220,73 +225,6 @@ hi! link @lsp.type.operator Operator
 call s:h("@lsp.typemod.function.defaultLibrary", { "fg": s:greenish })
 call s:h("CocInlayHint",            { "fg": s:grey, "format": "italic"})
 
-" Language highlight
-" ------------------
-
-" Java properties
-call s:h("jpropertiesIdentifier",   { "fg": s:pink })
-
-" Vim command
-call s:h("vimCommand",              { "fg": s:pink })
-
-" Javascript
-call s:h("jsFuncName",          { "fg": s:green })
-call s:h("jsThis",              { "fg": s:pink })
-call s:h("jsFunctionKey",       { "fg": s:green })
-call s:h("jsPrototype",         { "fg": s:aqua })
-call s:h("jsExceptions",        { "fg": s:aqua })
-call s:h("jsFutureKeys",        { "fg": s:aqua })
-call s:h("jsBuiltins",          { "fg": s:aqua })
-call s:h("jsArgsObj",           { "fg": s:aqua })
-call s:h("jsStatic",            { "fg": s:aqua })
-call s:h("jsSuper",             { "fg": s:aqua })
-call s:h("jsFuncArgRest",       { "fg": s:purple, "format": "italic" })
-call s:h("jsFuncArgs",          { "fg": s:orange, "format": "italic" })
-call s:h("jsStorageClass",      { "fg": s:aqua })
-call s:h("jsDocTags",           { "fg": s:aqua,   "format": "italic" })
-
-" Typescript
-call s:h("typescriptArrowFuncArg",        { "fg": s:orange, "format": "italic" })
-call s:h("typescriptFuncType",            { "fg": s:orange, "format": "italic" })
-call s:h("typescriptCall",                { "fg": s:orange, "format": "italic" })
-call s:h("typescriptVariable",            { "fg": s:aqua })
-call s:h("typescriptModule",              { "fg": s:aqua })
-call s:h("typescriptPredefinedType",      { "fg": s:aqua })
-call s:h("typescriptFuncTypeArrow",       { "fg": s:aqua })
-call s:h("typescriptImport",              { "fg": s:pink })
-call s:h("typescriptExport",              { "fg": s:pink })
-call s:h("typescriptCastKeyword",         { "fg": s:pink })
-call s:h("typescriptOperator",            { "fg": s:pink })
-call s:h("typescriptEndColons",           { "fg": s:white })
-call s:h("typescriptObjectLabel",         { "fg": s:green })
-call s:h("typescriptAmbientDeclaration",  { "fg": s:pink })
-call s:h("typescriptTestGlobal",          { "fg": s:pink })
-
-" Html
-call s:h("htmlTag",             { "fg": s:white })
-call s:h("htmlEndTag",          { "fg": s:white })
-call s:h("htmlTagName",         { "fg": s:pink })
-call s:h("htmlArg",             { "fg": s:green })
-call s:h("htmlSpecialChar",     { "fg": s:purple })
-
-" Xml
-call s:h("xmlTag",              { "fg": s:pink })
-call s:h("xmlEndTag",           { "fg": s:pink })
-call s:h("xmlTagName",          { "fg": s:orange })
-call s:h("xmlAttrib",           { "fg": s:green })
-
-" CSS
-call s:h("cssProp",             { "fg": s:yellow })
-call s:h("cssUIAttr",           { "fg": s:yellow })
-call s:h("cssFunctionName",     { "fg": s:aqua })
-call s:h("cssColor",            { "fg": s:purple })
-call s:h("cssPseudoClassId",    { "fg": s:purple })
-call s:h("cssClassName",        { "fg": s:green })
-call s:h("cssValueLength",      { "fg": s:purple })
-call s:h("cssCommonAttr",       { "fg": s:pink })
-call s:h("cssBraces" ,          { "fg": s:white })
-call s:h("cssClassNameDot",     { "fg": s:pink })
-call s:h("cssURL",              { "fg": s:orange, "format": "underline,italic" })
 " c
 call s:h("cLabel",                      { "fg": s:pink })
 call s:h("cStructure",                  { "fg": s:aqua })
@@ -303,14 +241,6 @@ call s:h("cppStructure",				{ "fg": s:pink })
 " vulkan
 call s:h("vkFunction",					{ "fg": s:greenish})
 call s:h("vkType",                      { "fg": s:greenishblue})
-
-" Lsp cxx highlight
-"call s:h("LspCxxHlSymClass",            { "fg": s:greenishblue})
-"call s:h("LspCxxHlSymField",            { "fg": s:aqua})
-"call s:h("LspCxxHlSymNamespace",        { "fg": s:purple, "format" : "bold"})
-
-"call s:h("cppSTLtype",                      { "fg" : s:aqua, "format":"bold"})
-"call matchadd("cppSTLtype", "std::\\zs\\w*\\ze<", 100)
 
 
 
