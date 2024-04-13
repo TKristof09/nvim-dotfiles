@@ -18,4 +18,7 @@ require("noice").setup({
     cmdline = {
       view = "cmdline",
     },
+    messages = {
+        view_search = false,
+    }
 })

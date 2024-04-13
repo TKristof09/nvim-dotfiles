@@ -48,7 +48,10 @@ o.showtabline = 0
 o.showmode = false -- we use lualine for this, so disablig it makes noice only show macro recording in the statusline
 
 
-o.shell = "powershell.exe"
+o.shell = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
+o.shellquote = ""
+o.shellxquote = ""
 
 -- disable background color erase
 vim.cmd [[
@@ -63,4 +66,4 @@ vim.cmd [[
 	endif
     ]]
 
-
+vim.g.undotree_SetFocusWhenToggle = 1

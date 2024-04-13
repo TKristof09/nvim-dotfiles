@@ -17,5 +17,6 @@ require("user.spider")
 require("user.notify")
 require("user.noice")
 require("user.harpoon")
+require("user.flash")
 
 vim.cmd "colorscheme monokai"

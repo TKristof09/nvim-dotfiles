@@ -113,7 +113,7 @@ lsp.setup()
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
-local cmp_mappings = lsp.defaults.cmp_mappings({
+local cmp_mappings = cmp.mapping.preset.insert({
     ['<C-l>'] = cmp.mapping.select_prev_item(cmp_select),
     ['<C-d>'] = cmp.mapping.select_next_item(cmp_select),
     ['<C-w>'] = cmp.mapping.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace }),
@@ -124,40 +124,6 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 })
-
-
-local lspkind = require('lspkind')
-cmp.setup({
-    window = {
-        completion = cmp.config.window.bordered({
-            border = 'rounded',
-            winhighlight = 'Normal:CmpMenu,FloatBorder:CmpMenu,CursorLine:CmpSelect,Search:None',
-        }),
-    },
-    formatting = {
-        fields = { "abbr", "kind", "menu" },
-        format = lspkind.cmp_format({
-            mode = 'symbol_text',
-            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-
-        })
-    },
-    sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-
-    }),
-    mapping = cmp_mappings,
-})
-cmp.setup.filetype("lua",{
-    mapping = cmp_mappings,
-    sources = cmp.config.sources({
-        { name = 'nvim_lua' },
-        { name = 'nvim_lsp' },
-    })
-})
-
-
 -- for some reason normal mappings don't work in cmdline
 local cmp_cmdline_mappings =cmp.mapping.preset.cmdline({
     ['<C-l>'] = {
@@ -191,6 +157,40 @@ local cmp_cmdline_mappings =cmp.mapping.preset.cmdline({
         end,
     },
 })
+
+local lspkind = require('lspkind')
+cmp.setup({
+    window = {
+        completion = cmp.config.window.bordered({
+            border = 'rounded',
+            winhighlight = 'Normal:CmpMenu,FloatBorder:CmpMenu,CursorLine:CmpSelect,Search:None',
+        }),
+    },
+    formatting = {
+        fields = { "abbr", "kind", "menu" },
+        format = lspkind.cmp_format({
+            mode = 'symbol_text',
+            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+
+        })
+    },
+    sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+
+    }),
+    mapping = cmp_mappings,
+})
+cmp.setup.filetype("lua",{
+    mapping = cmp_mappings,
+    sources = cmp.config.sources({
+        { name = 'nvim_lua' },
+        { name = 'nvim_lsp' },
+    })
+})
+
+
+
 -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline({ '/', '?' }, {
     mapping = cmp_cmdline_mappings,

@@ -41,7 +41,6 @@ return packer.startup(function(use)
 
     use "nvim-tree/nvim-tree.lua"
     use "nvim-tree/nvim-web-devicons"
-    --use {"akinsho/bufferline.nvim", tag = "v3.*" }
 -- lazy.nvim
     use {
         "folke/noice.nvim",
@@ -75,6 +74,7 @@ return packer.startup(function(use)
 
     use "chrisgrieser/nvim-spider"
 
+    use "folke/flash.nvim"
 
     use {
         'VonHeikemen/lsp-zero.nvim',
@@ -117,6 +117,7 @@ return packer.startup(function(use)
         lock = true,
     }
     use "HiPhish/rainbow-delimiters.nvim"
+    use "mbbill/undotree"
 
     use "TKristof09/vim-vulkan-ref"
     use "ThePrimeagen/vim-be-good"

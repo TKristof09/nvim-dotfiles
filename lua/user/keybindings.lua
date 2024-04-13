@@ -45,6 +45,7 @@ map("v", ">", ">gv")
 map("n", "<F7>", "gg=G")
 
 map("n", "<leader>e", ":NvimTreeToggle<CR>")
+map('n', '<leader>u', vim.cmd.UndotreeToggle)
 -- My vulkan reference pages plugin
 map("n", "<leader>vr", ":OpenRefPage<CR>")
 
@@ -58,3 +59,5 @@ map("n", "<leader>tv", ":vsplit | term<CR>")
 
 map("n", "n", ":set hlsearch<CR>n")
 map("n", "N", ":set hlsearch<CR>N")
+map("n", "#", ":set hlsearch<CR>#")
+map("n", "*", ":set hlsearch<CR>*")
