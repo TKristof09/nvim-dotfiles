@@ -61,3 +61,11 @@ vim.api.nvim_create_autocmd({"CmdlineEnter"},
             vim.opt.hlsearch = true
     end
 })
+
+vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"},
+{
+    pattern = {"*.eos"},
+    callback = function()
+        vim.bo.filetype = "eos"
+    end
+})

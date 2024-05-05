@@ -38,10 +38,11 @@ return packer.startup(function(use)
 
     use {"nvim-telescope/telescope.nvim"}
     use {'nvim-telescope/telescope-ui-select.nvim' }
+    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 
     use "nvim-tree/nvim-tree.lua"
     use "nvim-tree/nvim-web-devicons"
--- lazy.nvim
+    -- lazy.nvim
     use {
         "folke/noice.nvim",
 
@@ -118,6 +119,8 @@ return packer.startup(function(use)
     }
     use "HiPhish/rainbow-delimiters.nvim"
     use "mbbill/undotree"
+
+    use('mrjones2014/smart-splits.nvim')
 
     use "TKristof09/vim-vulkan-ref"
     use "ThePrimeagen/vim-be-good"

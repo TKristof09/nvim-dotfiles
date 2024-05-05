@@ -111,6 +111,9 @@ let s:greenish    = { "gui": "#68d966", "cterm": "36" }
 let s:greenishblue = {"gui": "#17ffb9", "cterm": "43"}
 let s:blue        = { "gui": "#178fff", "cterm": "32"}
 let s:darkblue    = { "gui": "#3b8af7", "cterm": "68"}
+
+let s:addbg       = { "gui": "#2C7027", "cterm": "236" }
+let s:delbg       = { "gui": "#822325", "cterm": "236" }
 " Highlighting
 " ------------
 
@@ -265,6 +268,11 @@ hi! link FloatBorder CmpMenu
 call s:h("IblIndent",         { "fg": s:darkgrey})
 call s:h("IblWhitespace",    { "fg": s:darkgrey})
 call s:h("IblScope", { "fg": s:darkgrey})
+
+
+call s:h("NeogitDiffAdd", { "bg": s:addbg})
+call s:h("NeogitDiffDelete", { "bg": s:delbg})
+
 " Terminal Colors
 " ---------------
 if has('nvim')

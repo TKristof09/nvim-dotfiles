@@ -18,5 +18,7 @@ require("user.notify")
 require("user.noice")
 require("user.harpoon")
 require("user.flash")
+require("user.compilemode")
+require("user.smart-splits")
 
 vim.cmd "colorscheme monokai"

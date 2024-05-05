@@ -48,10 +48,12 @@ o.showtabline = 0
 o.showmode = false -- we use lualine for this, so disablig it makes noice only show macro recording in the statusline
 
 
-o.shell = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
-o.shellquote = ""
-o.shellxquote = ""
+if vim.fn.has("win32") == 1 then
+    o.shell = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
+    o.shellquote = ""
+    o.shellxquote = ""
+end
 
 -- disable background color erase
 vim.cmd [[
