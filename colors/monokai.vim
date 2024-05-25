@@ -218,6 +218,10 @@ hi! link @variable Normal
 hi! link @function.builtin Function
 hi! link @constructor Structure
 hi! link @type.python Structure
+hi! link @type.qualifier Keyword
+hi! link @type.builtin Type
+hi! link @variable.builtin Keyword
+hi! link @attribute.cpp Normal
 
 hi! link @lsp.type.class Structure
 hi! link @lsp.type.variable Normal
@@ -225,8 +229,9 @@ hi! link @lsp.type.paramater Normal
 hi! link @lsp.type.property Normal
 hi! link @lsp.typemod.class.defaultLibrary Type
 hi! link @lsp.type.operator Operator
+hi! link @lsp.type.enum.cpp Structure
 call s:h("@lsp.typemod.function.defaultLibrary", { "fg": s:greenish })
-call s:h("CocInlayHint",            { "fg": s:grey, "format": "italic"})
+call s:h("LspInlayHint",            { "fg": s:grey, "format": "italic"})
 
 " c
 call s:h("cLabel",                      { "fg": s:pink })
@@ -272,6 +277,10 @@ call s:h("IblScope", { "fg": s:darkgrey})
 
 call s:h("NeogitDiffAdd", { "bg": s:addbg})
 call s:h("NeogitDiffDelete", { "bg": s:delbg})
+
+
+call s:h("DiagnosticError", { "fg": s:red})
+call s:h("DiagnosticWarn", { "fg": s:orange})
 
 " Terminal Colors
 " ---------------

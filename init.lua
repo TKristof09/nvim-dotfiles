@@ -1,3 +1,5 @@
+require("user.monokai") -- need to be before lualine for the auto theme to work
+
 require("user.options")
 require("user.keybindings")
 require("user.plugins")
@@ -21,4 +23,3 @@ require("user.flash")
 require("user.compilemode")
 require("user.smart-splits")
 
-vim.cmd "colorscheme monokai"

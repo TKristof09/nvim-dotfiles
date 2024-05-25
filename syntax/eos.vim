@@ -24,6 +24,8 @@ syntax keyword eosKeywords if else while let fun
 " Type names the compiler recognizes
 syntax keyword eosTypeNames i64 i32 i16 i8 u64 u32 u16 u8 f64 f32 bool str
 
+syntax keyword eosConstants true false
+
 " Comments
 syntax region eosCommentLine start="//" end="$" contains=eosTodos
 
@@ -37,7 +39,7 @@ syntax region eosChar start=/\v'/ skip=/\v\\./ end=/\v'/ contains=eosEscapes
 syntax match eosEscapes display contained "\\[nr\"']"
 
 " Number literals
-syntax region eosNumber start=/\s\d/ skip=/\d/ end=/\s/
+syntax region eosNumber start=/\w\@<!\d/ skip=/\d/ end=/\d\@!/
 
 " Set highlights
 highlight default link eosTodos Todo
@@ -48,5 +50,6 @@ highlight default link eosNumber Number
 highlight default link eosTypeNames Type
 highlight default link eosChar Character
 highlight default link eosEscapes SpecialChar
+highlight default link eosConstants Constant
 
 let b:current_syntax = "eos"

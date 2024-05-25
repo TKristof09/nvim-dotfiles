@@ -1,5 +1,6 @@
 local lsp = require('lsp-zero').preset("minimal")
 local lsp_signature = require("lsp_signature")
+require("mason").setup()
 
 -- lsp_signature.setup({
 --     bind = true,
@@ -9,10 +10,6 @@ local lsp_signature = require("lsp_signature")
 --     select_signature_key = "<M-n>"
 -- })
 
-lsp.ensure_installed({
-    'clangd',
-    'lua_ls'
-})
 
 lsp.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
@@ -61,7 +58,18 @@ require('mason-lspconfig').setup({
         lsp.default_setup,
         clangd = function()
             require('lspconfig').clangd.setup{
-                cmd={"clangd", "--background-index", "--clang-tidy", "--completion-style=bundled", "--header-insertion=never", "--suggest-missing-includes", "--cross-file-rename", "--enable-config", "--limit-results=0", "--header-insertion-decorators", "-j=8", "--folding-ranges"}
+                cmd={"clangd", "--background-index", "--clang-tidy", "--completion-style=bundled", "--header-insertion=never", "--suggest-missing-includes", "--cross-file-rename", "--enable-config", "--limit-results=0", "--header-insertion-decorators", "-j=8", "--folding-ranges"},
+                settings = {
+                    clangd = {
+                        InlayHints = {
+                            Enabled = true,
+                            ParameterNames = true,
+                            DeducedTypes = true,
+                            Designators = true,
+                        },
+                        fallbackFlags = { "-std=c++20" },
+                    },
+                }
             }
         end,
         rust_analyzer = function()
@@ -100,15 +108,8 @@ require('mason-lspconfig').setup({
 
         end,
         lua_ls = function()
-            require('lspconfig').lua_ls.setup{
-                settings = {
-                    Lua = {
-                        diagnostics = {
-                            globals = {'vim'}
-                        }
-                    }
-                }
-            }
+            local lua_opts = lsp.nvim_lua_ls()
+            require('lspconfig').lua_ls.setup(lua_opts)
         end
     },
 })
@@ -118,7 +119,7 @@ require('mason-lspconfig').setup({
 
 
 lsp.setup()
-
+vim.lsp.inlay_hint.enable(true)
 
 
 local cmp = require('cmp')
