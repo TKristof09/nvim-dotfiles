@@ -22,4 +22,5 @@ require("user.harpoon")
 require("user.flash")
 require("user.compilemode")
 require("user.smart-splits")
-
+require("user.qf")
+require("user.color_highlight")

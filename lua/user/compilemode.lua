@@ -1,6 +1,55 @@
 local last_cmd = ""
+local Job = require('plenary.job')
+
+local function run_cmd(cmd)
+    -- Separate the binary (first word)
+    local binary = cmd:match("^[^%s]+")
+    local args = {}
+
+    -- Extract the arguments (everything after the binary)
+    for arg in cmd:gmatch("%S+") do
+        if arg ~= binary then
+            table.insert(args, arg)
+        end
+    end
+
+    print("Running command: " .. binary .. " with args: " .. table.concat(args, " "))
+    vim.fn.setqflist({}, 'r')
+    Job:new({
+        command = binary,
+        args = args,
+
+        on_stderr = function(err, data)
+            vim.schedule(function()
+                vim.fn.setqflist({}, 'a', {
+                    title = cmd .. " output",
+                    lines = {data}
+                })
+                vim.cmd("botright cwindow")
+            end)
+        end,
+        on_stdout = function(err, data)
+            vim.schedule(function()
+                vim.fn.setqflist({}, 'a', {
+                    title = cmd .. " output",
+                    lines = {data}
+                })
+                vim.cmd("botright cwindow")
+            end)
+        end,
+        on_exit = function(job, exit_code)
+            vim.schedule(function()
+                vim.fn.setqflist({}, 'a', {
+                    lines = {"Command finished with exit code: " .. exit_code}
+                })
+                vim.cmd("botright cwindow")
+            end)
+        end
+    }):start()
+end
+
 local function ask_and_run_command()
-    local cmd = vim.ui.input({
+    vim.ui.input({
         prompt="Enter command to run: ",
         completion="shellcmd"
     }, function(cmd)
@@ -8,14 +57,12 @@ local function ask_and_run_command()
                 return
             end
 
-            vim.cmd("w")
             last_cmd = cmd
-            cmd = cmd:gsub("%%", vim.fn.expand("%"))
-            print("Running command: " .. cmd)
-            vim.fn.setqflist({}, ' ', {
-                lines = vim.fn.systemlist(cmd)
-            })
-            vim.cmd("cwindow")
+            if not vim.fn.empty(vim.fn.expand("%")) == 1 then
+                vim.cmd("w")
+                cmd = cmd:gsub("%%", vim.fn.expand("%"))
+            end
+            run_cmd(cmd)
         end)
 end
 
@@ -24,13 +71,13 @@ local function recompile()
         ask_and_run_command()
     else
 
-        vim.cmd("w")
-        local cmd = last_cmd:gsub("%%", vim.fn.expand("%"))
+        local cmd = last_cmd
+        if not vim.fn.empty(vim.fn.expand("%")) == 1 then
+            vim.cmd("w")
+            cmd = cmd:gsub("%%", vim.fn.expand("%"))
+        end
         print("Running command: " .. cmd)
-        vim.fn.setqflist({}, ' ', {
-            lines = vim.fn.systemlist(cmd)
-        })
-        vim.cmd("cwindow")
+        run_cmd(cmd)
     end
 end
 

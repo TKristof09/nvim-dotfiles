@@ -59,7 +59,8 @@ return packer.startup(function(use)
         'mrded/nvim-lsp-notify',
         requires = { 'rcarriga/nvim-notify' },
     }
-    use "ap/vim-css-color"
+
+    use 'brenoprata10/nvim-highlight-colors'
 
     use "folke/which-key.nvim"
 

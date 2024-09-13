@@ -61,3 +61,11 @@ map("n", "n", ":set hlsearch<CR>n")
 map("n", "N", ":set hlsearch<CR>N")
 map("n", "#", ":set hlsearch<CR>#")
 map("n", "*", ":set hlsearch<CR>*")
+
+map("n", "<leader>qq", function()
+    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+    local action = qf_winid > 0 and 'cclose' or 'copen'
+    vim.cmd('botright '..action)
+end)
+map("n", "<leader>qa", ":cnext<CR>")
+map("n", "<leader>qp", ":cprev<CR>")

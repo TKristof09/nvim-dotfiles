@@ -1,22 +1,3 @@
-vim.cmd [[
-	au BufWritePre * %s/\s\+$//e
-
-    function! ToggleNumbersOn()
-		set nu!
-		set rnu
-	endfunction
-	function! ToggleRelativeOn()
-		set rnu!
-		set nu
-	endfunction
-    augroup line_numbers
-        autocmd FocusLost   * call ToggleRelativeOn()
-        autocmd FocusGained * call ToggleRelativeOn()
-        autocmd InsertEnter * call ToggleRelativeOn()
-        autocmd InsertLeave * call ToggleRelativeOn()
-    augroup END
-]]
-
 -- format on save autocmd
 vim.api.nvim_create_autocmd({"BufWritePre"},
 {

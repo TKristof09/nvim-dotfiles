@@ -72,7 +72,6 @@ Flash.jump({
 end
 
 
-
 vim.keymap.set({"n", "x","o"}, "sh", hopWord)
 vim.keymap.set({"n", "x","o"}, "ss", function() require("flash").jump() end)
 vim.keymap.set({"n", "x","o"}, "st", function() require("flash").treesitter() end)

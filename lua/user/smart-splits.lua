@@ -76,7 +76,7 @@ require('smart-splits').setup({
   -- automatically determined, unless explicitly disabled or set,
   -- by checking the $TERM_PROGRAM environment variable,
   -- and the $KITTY_LISTEN_ON environment variable for Kitty
-  multiplexer_integration = true,
+  -- multiplexer_integration = true,
   -- disable multiplexer navigation if current multiplexer pane is zoomed
   -- this functionality is only supported on tmux and Wezterm due to kitty
   -- not having a way to check if a pane is zoomed

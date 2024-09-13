@@ -19,7 +19,7 @@ vim.keymap.set('n', '<leader>b', builtin.buffers, {})
 vim.keymap.set('n', '<leader>j', builtin.jumplist, {})
 
 
-vim.keymap.set('n', '<leader>p', builtin.diagnostics, {})
+vim.keymap.set('n', '<leader>pa', builtin.diagnostics, {})
 vim.keymap.set('n', '<leader>fr', builtin.lsp_references, {})
 vim.keymap.set('n', '<leader>d', builtin.lsp_definitions, {})
 vim.keymap.set('n', '<leader>ss', builtin.lsp_document_symbols, {})
