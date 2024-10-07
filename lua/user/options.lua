@@ -46,6 +46,7 @@ o.viewoptions:remove({"options"})
 o.showtabline = 0
 
 o.showmode = false -- we use lualine for this, so disablig it makes noice only show macro recording in the statusline
+o.tildeop = true
 
 
 if vim.fn.has("win32") == 1 then

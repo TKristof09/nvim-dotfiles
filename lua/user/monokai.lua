@@ -69,6 +69,7 @@ vim.api.nvim_set_hl(0, "VertSplit",     { fg = darkgrey,   bg = darkblack })
 vim.api.nvim_set_hl(0, "LineNr",        { fg = grey,       bg = bg_blue })
 vim.api.nvim_set_hl(0, "CursorLineNr",  { fg = orange,     bg = bg_blue })
 vim.api.nvim_set_hl(0, "SignColumn",    {                     bg = bg_blue })
+vim.api.nvim_set_hl(0, "Conceal",       { fg = grey})
 
 -- spell
 vim.api.nvim_set_hl(0, "SpellBad",      { fg = red,                              underline = true })

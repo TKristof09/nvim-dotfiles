@@ -69,3 +69,12 @@ map("n", "<leader>qq", function()
 end)
 map("n", "<leader>qa", ":cnext<CR>")
 map("n", "<leader>qp", ":cprev<CR>")
+
+-- Bind 'gd' to follow links in help files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "help",
+  callback = function()
+    vim.keymap.set('n', 'gd', '<C-]>', { buffer = true, silent = true })
+  end,
+})
+
