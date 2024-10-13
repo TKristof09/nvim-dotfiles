@@ -49,6 +49,8 @@ o.showmode = false -- we use lualine for this, so disablig it makes noice only s
 o.tildeop = true
 
 
+
+
 if vim.fn.has("win32") == 1 then
     o.shell = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
     o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
@@ -69,4 +71,3 @@ vim.cmd [[
 	endif
     ]]
 
-vim.g.undotree_SetFocusWhenToggle = 1

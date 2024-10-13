@@ -34,7 +34,7 @@ local br_purple   = "#B77EE0"
 local br_cyan     = "#54CED6"
 local br_white    = "#FFFFFF"
 
-local bg_blue     = "#252732"
+local bg_blue     = "#232136"
 local bg_cmp      = "#3c3f51"
 local greenish    = "#68d966"
 local greenishblue ="#17ffb9"
@@ -48,6 +48,7 @@ local delbg       = "#822325"
 
 -- editor
 vim.api.nvim_set_hl(0, "Normal",        { fg = white,      bg = bg_blue })
+vim.api.nvim_set_hl(0, "Italic",        { fg = white,      bg = bg_blue, italic = true })
 vim.api.nvim_set_hl(0, "ColorColumn",   {                     bg = lightblack })
 vim.api.nvim_set_hl(0, "Cursor",        { fg = black,      bg = white })
 vim.api.nvim_set_hl(0, "CursorColumn",  {                     bg = lightblack2 })

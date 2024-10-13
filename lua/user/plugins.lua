@@ -38,8 +38,7 @@ return packer.startup(function(use)
 
     use {"nvim-telescope/telescope.nvim"}
     use {'nvim-telescope/telescope-ui-select.nvim' }
-    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
-
+    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' }
     use "nvim-tree/nvim-tree.lua"
     use "nvim-tree/nvim-web-devicons"
     -- lazy.nvim
@@ -94,7 +93,6 @@ return packer.startup(function(use)
             {'hrsh7th/cmp-path'},
             {'hrsh7th/cmp-nvim-lua'},
             {'hrsh7th/cmp-cmdline'},
-            {'L3MON4D3/LuaSnip'},     -- Required
             {"ray-x/lsp_signature.nvim"},
             {"onsails/lspkind.nvim"}
         }

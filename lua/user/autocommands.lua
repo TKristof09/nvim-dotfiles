@@ -52,8 +52,9 @@ vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"},
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "help",
-  callback = function()
-    vim.opt_local.conceallevel = 0
-  end,
+    pattern = "help",
+    callback = function()
+        vim.opt_local.conceallevel = 0
+    end,
 })
+

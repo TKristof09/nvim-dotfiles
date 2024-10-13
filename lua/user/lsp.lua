@@ -95,19 +95,20 @@ require('mason-lspconfig').setup({
                 }
             }
         end,
-        pylsp = function ()
-            require('lspconfig').pylsp.setup{
+        basedpyright = function()
+            require("lspconfig").basedpyright.setup({
                 settings = {
-                    pylsp = {
-                        plugins = {
-                            pycodestyle = {
-                                enabled = false
-                            },
-                        }
+                    basedpyright = {
+                        analysis = {
+                            typeCheckingMode = "basic",
+                            autoSearchPaths = true,
+                        },
+                    },
+                    python = {
+                        pythonPath = "venv\\Scripts\\python.exe"
                     }
                 }
-            }
-
+            })
         end,
         lua_ls = function()
             local lua_opts = lsp.nvim_lua_ls()
@@ -135,8 +136,8 @@ local cmp_mappings = cmp.mapping.preset.insert({
     ['<C-x>'] = cmp.mapping.scroll_docs(4),
     ['<C-m>'] = cmp.mapping.scroll_docs(-4),
     -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+    ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
+    ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
 })
 -- for some reason normal mappings don't work in cmdline
 local cmp_cmdline_mappings =cmp.mapping.preset.cmdline({

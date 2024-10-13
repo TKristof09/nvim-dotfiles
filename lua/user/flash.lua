@@ -8,9 +8,12 @@ Flash.setup({
         rainbow = {
             enabled = true,
         }
-
     },
-
+    modes = {
+        char = {
+        enabled = false
+        }
+    }
 })
 local function on_done(done, on_done)
   local check = assert(vim.loop.new_check())
@@ -27,7 +30,6 @@ local function on_done(done, on_done)
   check:start(vim.schedule_wrap(fn))
 end
 
----@param opts Flash.Format
 local function format(opts)
   -- always show first and second label
   return {
