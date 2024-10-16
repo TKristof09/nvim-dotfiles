@@ -66,10 +66,12 @@ end
 local function run_command(command)
     buf = create_compilation_buffer()
 
-    local binary = command:match("^[^%s]+")
+    local first = command:match("^[^%s]+")
+    local binary = vim.fn.exepath(first)
     local args = {}
 
     -- Extract the arguments (everything after the binary)
+    command = command:sub(#first + 1)
     for arg in command:gmatch("%S+") do
         if arg ~= binary then
             table.insert(args, arg)
