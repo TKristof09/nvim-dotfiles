@@ -49,6 +49,9 @@ local function add_output(output)
             table.insert(lines, line)
         end
         vim.api.nvim_buf_set_lines(buf, n, n + #lines + 1, false, lines)
+		vim.api.nvim_buf_call(buf, function()
+			vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), {vim.api.nvim_buf_line_count(buf), 0})
+		end)
     end)
 end
 
@@ -100,6 +103,10 @@ local function run_command(command)
                     local start_pos, end_pos = string.find(vim.api.nvim_buf_get_lines(buf, -2, -1, false)[1], "finished")
                     local line_num = vim.api.nvim_buf_line_count(buf)
                     vim.highlight.range(buf, highlight_ns, "DiagnosticHint", {line_num - 1, start_pos-1}, {line_num - 1, end_pos}, {})
+
+					vim.api.nvim_buf_call(buf, function()
+						vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), {vim.api.nvim_buf_line_count(buf), 0})
+					end)
                 end)
             else 
                 vim.schedule(function()
@@ -108,6 +115,10 @@ local function run_command(command)
                     local line_num = vim.api.nvim_buf_line_count(buf)
                     vim.highlight.range(buf, highlight_ns, "DiagnosticError", {line_num - 1, start_pos - 1}, {line_num - 1, end_pos}, {})
                     vim.highlight.range(buf, highlight_ns, "DiagnosticError", {line_num - 1, end_pos + 11}, {line_num - 1, end_pos + 11 + tostring(return_val):len()}, {})
+
+					vim.api.nvim_buf_call(buf, function()
+						vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), {vim.api.nvim_buf_line_count(buf), 0})
+					end)
                 end)
             end
             vim.schedule(highlight_buffer)
