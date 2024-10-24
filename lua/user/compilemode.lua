@@ -7,6 +7,7 @@ local CompilationPlugin = {}
 local buf = -1 
 local highlight_ns = vim.api.nvim_create_namespace("compilemode/highlight")
 local last_cmd = ""
+local job = nil
 
 
 local find_buffer_by_name = function(name)
@@ -42,17 +43,19 @@ local function create_compilation_buffer()
     return buf
 end
 local function add_output(output)
-    vim.schedule(function()
-        local n = vim.api.nvim_buf_line_count(buf)
-        local lines = {}
-        for line in output:gmatch("[^\r\n]+") do
-            table.insert(lines, line)
-        end
-        vim.api.nvim_buf_set_lines(buf, n, n + #lines + 1, false, lines)
-		vim.api.nvim_buf_call(buf, function()
-			vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), {vim.api.nvim_buf_line_count(buf), 0})
+	if output ~= nil then
+		vim.schedule(function()
+			local n = vim.api.nvim_buf_line_count(buf)
+			local lines = {}
+			for line in output:gmatch("[^\r\n]+") do
+				table.insert(lines, line)
+			end
+			vim.api.nvim_buf_set_lines(buf, n, n + #lines + 1, false, lines)
+			vim.api.nvim_buf_call(buf, function()
+				vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), {vim.api.nvim_buf_line_count(buf), 0})
+			end)
 		end)
-    end)
+	end
 end
 
 local function highlight_buffer()
@@ -84,7 +87,7 @@ local function run_command(command)
     vim.api.nvim_buf_set_lines(buf, 0, 2, false, {"Running command: " .. binary .. " " .. table.concat(args, " ") .. " (CWD: " .. vim.fn.getcwd() .." )", ""})
     vim.highlight.range(buf, highlight_ns, "Italic", {0, 0}, {0, vim.fn.col("$")}, {})
 
-    Job:new({
+    job = Job:new({
         command = binary,
         args = args,
         cwd = vim.fn.getcwd(),
@@ -123,7 +126,27 @@ local function run_command(command)
             end
             vim.schedule(highlight_buffer)
         end
-    }):start()
+    })
+	job:start()
+end
+
+local function stop_job()
+	if job ~= nil then
+		job:shutdown(-69, 15)
+
+		vim.schedule(function()
+			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation terminated forcefully"})
+			local start_pos, end_pos = string.find(vim.api.nvim_buf_get_lines(buf, -2, -1, false)[1], "terminated forcefully")
+			local line_num = vim.api.nvim_buf_line_count(buf)
+			vim.highlight.range(buf, highlight_ns, "DiagnosticError", {line_num - 1, start_pos - 1}, {line_num - 1, end_pos}, {})
+
+			vim.api.nvim_buf_call(buf, function()
+				vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), {vim.api.nvim_buf_line_count(buf), 0})
+			end)
+		end)
+	else
+		vim.print("Job isn't running")
+	end
 end
 
 local function goto_error()
@@ -222,6 +245,10 @@ function CompilationPlugin.recompile()
     end
 end
 
+function CompilationPlugin:stop()
+	stop_job()
+end
+
 function CompilationPlugin.next_error()
     next_error()
 end
@@ -278,7 +305,10 @@ end, { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>cg', function()
     CompilationPlugin.goto_error()
 end, { noremap = true, silent = true })
--- glslangValidator.exe -g --enhanced-msgs --target-env vulkan1.3 %
+
+vim.keymap.set('n', '<leader>ck', function()
+	CompilationPlugin.stop()
+end, { noremap = true, silent = true })
 
 -- glslangValidator errorformat
 vim.opt.errorformat:prepend("%EERROR: %f:%l: %m")
