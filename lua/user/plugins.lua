@@ -77,26 +77,30 @@ return packer.startup(function(use)
 
     use "folke/flash.nvim"
 
-    use {
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v3.x',
-        requires = {
-            -- LSP Support
-            {'neovim/nvim-lspconfig'},             -- Required
-            {'williamboman/mason.nvim'},           -- Optional
-            {'williamboman/mason-lspconfig.nvim'}, -- Optional
+    -- LSP Support
+    use 'neovim/nvim-lspconfig'
 
-            -- Autocompletion
-            {'hrsh7th/nvim-cmp'},     -- Required
-            {'hrsh7th/cmp-nvim-lsp'}, -- Required
-            {'hrsh7th/cmp-buffer'},
-            {'hrsh7th/cmp-path'},
-            {'hrsh7th/cmp-nvim-lua'},
-            {'hrsh7th/cmp-cmdline'},
-            {"ray-x/lsp_signature.nvim"},
-            {"onsails/lspkind.nvim"}
-        }
-    }
+    use 'williamboman/mason.nvim'
+
+    use 'williamboman/mason-lspconfig.nvim'
+
+
+    -- Autocompletion
+    use 'hrsh7th/nvim-cmp'
+
+    use 'hrsh7th/cmp-nvim-lsp'
+
+    use 'hrsh7th/cmp-buffer'
+
+    use 'hrsh7th/cmp-path'
+
+    use 'hrsh7th/cmp-nvim-lua'
+
+    use 'hrsh7th/cmp-cmdline'
+
+
+    use "onsails/lspkind.nvim"
+
     use {
         "SmiteshP/nvim-navic",
         requires = "neovim/nvim-lspconfig"

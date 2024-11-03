@@ -1,63 +1,78 @@
-local lsp = require('lsp-zero').preset("minimal")
-local lsp_signature = require("lsp_signature")
 require("mason").setup()
 
--- lsp_signature.setup({
---     bind = true,
---     handler_opts = {
---         border = "single"
---     },
---     select_signature_key = "<M-n>"
--- })
+vim.api.nvim_create_autocmd('LspAttach', {
+    desc = 'LSP actions',
+    callback = function(event)
+        local opts = {buffer = event.buf, remap = false, silent = true}
 
+        vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
+        vim.keymap.set("n", "gt", function() vim.lsp.buf.type_definition() end, opts)
+        vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+        vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
+        vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+        vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
+        vim.keymap.set("n", "<C-O>", ":ClangdSwitchSourceHeader<CR>", opts)
+        vim.keymap.set('n', '<leader>ps', function () vim.diagnostic.open_float() end, opts)
+        vim.keymap.set('n', '<leader>pn', function () vim.diagnostic.goto_next() end, opts)
+        vim.keymap.set('n', '<leader>pp', function () vim.diagnostic.goto_prev() end, opts)
+        vim.keymap.set('n', '<leader>lf', function () vim.lsp.buf.format() end, opts)
 
-lsp.on_attach(function(client, bufnr)
-    -- see :help lsp-zero-keybindings
-    -- to learn the available actions
-    local opts = {buffer = bufnr, remap = false, silent = true}
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        if client.server_capabilities.documentSymbolProvider then
+            require('nvim-navic').attach(client, event.buf)
+        end
+        --- Guard against servers without the signatureHelper capability
+        if client.server_capabilities.codeLensProvider then
+            vim.lsp.codelens.refresh()
+            vim.api.nvim_create_autocmd("InsertLeave", {
+            desc = "Codelens refresh",
+            buffer = event.buf,
+            callback = function (_)
+                vim.lsp.codelens.refresh({bufnr = event.buf})
+            end
+            })
+        end
 
-    vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-    vim.keymap.set("n", "gt", function() vim.lsp.buf.type_definition() end, opts)
-    vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-    vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
-    vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-    vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
-    vim.keymap.set("n", "<C-O>", ":ClangdSwitchSourceHeader<CR>", opts)
-    vim.keymap.set('n', '<leader>ps', function () vim.diagnostic.open_float() end, opts)
-    vim.keymap.set('n', '<leader>pn', function () vim.diagnostic.goto_next() end, opts)
-    vim.keymap.set('n', '<leader>pp', function () vim.diagnostic.goto_prev() end, opts)
-
-    if client.server_capabilities.documentSymbolProvider then
-        require('nvim-navic').attach(client, bufnr)
     end
-
-end)
-
-lsp.set_sign_icons({
-    error = '✘',
-    warn = '▲',
-    hint = '⚑',
-    info = '»'
 })
 
-lsp.set_server_config({
-    capabilities = {
-        textDocument = {
-            foldingRange = {
-                dynamicRegistration = false,
-                lineFoldingOnly = true
-            }
-        },
-        offsetEncoding = {'utf-16'}
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+    'force',
+    lspconfig_defaults.capabilities,
+    require('cmp_nvim_lsp').default_capabilities()
+)
+
+require('lspconfig').ocamllsp.setup({
+    settings = {
+        codelens = { enable = true },
+        inlayHints = { enable = true },
+        syntaxDocumentation = { enable = true },
     },
-    offsetEncoding = {'utf-16'}
+    filetypes = {
+        "ocaml",
+        "ocaml.interface",
+        "ocaml.menhir",
+        "ocaml.cram",
+        "ocaml.mlx",
+        "ocaml.ocamllex",
+        "reason",
+    },
+    get_language_id = function(_, ftype)
+        return ftype
+    end,
 })
-
+vim.lsp.set_log_level("TRACE")
 
 require('mason-lspconfig').setup({
     ensure_installed = {},
     handlers = {
-        lsp.default_setup,
+        -- The first entry (without a key) will be the default handler
+        -- and will be called for each installed server that doesn't have
+        -- a dedicated handler.
+        function (server_name) -- default handler (optional)
+            require("lspconfig")[server_name].setup {}
+        end,
         clangd = function()
             require('lspconfig').clangd.setup{
                 cmd={"clangd", "--background-index", "--clang-tidy", "--completion-style=bundled", "--header-insertion=never", "--suggest-missing-includes", "--cross-file-rename", "--enable-config", "--limit-results=0", "--header-insertion-decorators", "-j=8", "--folding-ranges"},
@@ -111,8 +126,34 @@ require('mason-lspconfig').setup({
             })
         end,
         lua_ls = function()
-            local lua_opts = lsp.nvim_lua_ls()
-            require('lspconfig').lua_ls.setup(lua_opts)
+            require'lspconfig'.lua_ls.setup {
+                on_init = function(client)
+                    if client.workspace_folders then
+                        local path = client.workspace_folders[1].name
+                        if vim.uv.fs_stat(path..'/.luarc.json') or vim.uv.fs_stat(path..'/.luarc.jsonc') then
+                            return
+                        end
+                    end
+
+                    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+                        runtime = {
+                            -- Tell the language server which version of Lua you're using
+                            -- (most likely LuaJIT in the case of Neovim)
+                            version = 'LuaJIT'
+                        },
+                        -- Make the server aware of Neovim runtime files
+                        workspace = {
+                            checkThirdParty = false,
+                            library = {
+                                vim.env.VIMRUNTIME
+                            }
+                        }
+                    })
+                end,
+                settings = {
+                    Lua = {}
+                }
+            }
         end
     },
 })
@@ -121,12 +162,10 @@ require('mason-lspconfig').setup({
 
 
 
-lsp.setup()
 vim.lsp.inlay_hint.enable(true)
 
 
 local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
 local cmp_select = {behavior = cmp.SelectBehavior.Select}
 local cmp_mappings = cmp.mapping.preset.insert({
     ['<C-l>'] = cmp.mapping.select_prev_item(cmp_select),
@@ -136,8 +175,20 @@ local cmp_mappings = cmp.mapping.preset.insert({
     ['<C-x>'] = cmp.mapping.scroll_docs(4),
     ['<C-m>'] = cmp.mapping.scroll_docs(-4),
     -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
-    ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
+    ['<C-f>'] = cmp.mapping(function(fallback)
+        if vim.snippet.active({direction = 1}) then
+            vim.snippet.jump(1)
+        else
+            fallback()
+        end
+    end, {'i', 's'}),
+    ['<C-b>'] = cmp.mapping(function(fallback)
+        if vim.snippet.active({direction = -1}) then
+            vim.snippet.jump(-1)
+        else
+            fallback()
+        end
+    end, {'i', 's'})
 })
 -- for some reason normal mappings don't work in cmdline
 local cmp_cmdline_mappings =cmp.mapping.preset.cmdline({
@@ -225,4 +276,6 @@ cmp.setup.cmdline(':', {
             }}
     })
 })
+
+
 

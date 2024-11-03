@@ -27,3 +27,12 @@ require("user.color_highlight")
 require("user.undotree")
 
 -- require("compile-mode").setup()
+vim.filetype.add {
+  extension = {
+    mli = "ocaml.interface",
+    mly = "ocaml.menhir",
+    mll = "ocaml.ocamllex",
+    mlx = "ocaml",
+    t = "ocaml.cram",
+  },
+}
