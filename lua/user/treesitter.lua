@@ -6,13 +6,12 @@ require'nvim-treesitter.configs'.setup {
         additional_vim_regex_highlighting = false,
     },
     indent = {
-        disable = {"c", "cpp", "rust"},
+        disable = {"c", "cpp", "rust", "ocaml", "ocaml_interface"},
         enable = true,
     },
 }
 
 vim.treesitter.language.register("ocaml_interface", "ocaml.interface")
 vim.treesitter.language.register("menhir", "ocaml.menhir")
-vim.treesitter.language.register("ocaml_interface", "ocaml.interface")
 vim.treesitter.language.register("cram", "ocaml.cram")
 vim.treesitter.language.register("ocamllex", "ocaml.ocamllex")

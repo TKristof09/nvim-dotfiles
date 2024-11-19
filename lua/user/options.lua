@@ -23,7 +23,7 @@ o.smartcase = true
 
 o.gdefault = true -- Never have to type /g at the end of search / replace again
 o.ignorecase = true
-o.hlsearch = true
+o.hlsearch = false
 o.incsearch = true
 o.showmatch = true
 

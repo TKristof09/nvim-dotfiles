@@ -14,7 +14,6 @@ require("user.indent")
 require("user.copilot")
 require("user.ufo")
 require("user.lsp")
-require("user.nvim_tree")
 require("user.spider")
 require("user.notify")
 require("user.noice")
@@ -22,11 +21,12 @@ require("user.harpoon")
 require("user.flash")
 require("user.compilemode")
 require("user.smart-splits")
--- require("user.qf")
+require("user.qf")
 require("user.color_highlight")
 require("user.undotree")
+require("user.oil")
+require("user.baleia")
 
--- require("compile-mode").setup()
 vim.filetype.add {
   extension = {
     mli = "ocaml.interface",

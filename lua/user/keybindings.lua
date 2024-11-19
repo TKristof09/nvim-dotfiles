@@ -1,8 +1,9 @@
 function map(m, k, v)
-	vim.keymap.set(m, k, v, {noremap = true, silent = true})
+    vim.keymap.set(m, k, v, { noremap = true, silent = true })
 end
+
 function map_expr(m, k, v)
-	api.nvim_set_keymap(m, k, v, {noremap = true, silent = true, expr = true})
+    api.nvim_set_keymap(m, k, v, { noremap = true, silent = true, expr = true })
 end
 
 vim.g.mapleader = " "
@@ -64,16 +65,20 @@ map("n", "*", ":set hlsearch<CR>*")
 map("n", "<leader>qq", function()
     local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
     local action = qf_winid > 0 and 'cclose' or 'copen'
-    vim.cmd('botright '..action)
+    vim.cmd('botright ' .. action)
 end)
 map("n", "<leader>qa", ":cnext<CR>")
 map("n", "<leader>qp", ":cprev<CR>")
 
+map("n", "<leader>m", "`")
+
+map("n", "<C-j>", "<C-O>")
+map("n", "<C-i>", "<C-I>")
+
 -- Bind 'gd' to follow links in help files
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "help",
-  callback = function()
-    vim.keymap.set('n', 'gd', '<C-]>', { buffer = true, silent = true })
-  end,
+    pattern = "help",
+    callback = function()
+        vim.keymap.set('n', 'gd', '<C-]>', { buffer = true, silent = true })
+    end,
 })
-

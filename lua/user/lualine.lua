@@ -51,7 +51,8 @@ require("lualine").setup{
                 "navic",
                 color = 'lualine_b_normal',
                 color_correction = nil,
-                navic_opts = nil
+                navic_opts = nil,
+                draw_empty = true
             }
         }
     },

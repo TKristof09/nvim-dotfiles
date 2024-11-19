@@ -40,6 +40,13 @@ local function create_compilation_buffer()
     vim.cmd('botright split')
     vim.api.nvim_win_set_buf(0, buf)
 
+    vim.api.nvim_buf_set_keymap(buf, 'n', '<2-LeftMouse>', '', {
+        noremap = true,
+        callback = function()
+            CompilationPlugin.goto_error()
+        end
+    })
+
     return buf
 end
 local function add_output(output)
@@ -60,12 +67,36 @@ end
 
 local function highlight_buffer()
     for i, line in ipairs(vim.api.nvim_buf_get_lines(buf, 2, -1, false)) do
-        local start_pos, end_pos = string.find(line, "[%s?:?%w_%-/\\%.~]+%.[%w_]+[%(:]%d+[%):]")
+        local start_pos, end_pos = string.find(line, "[%s?:?%w_%-/\\%.~]+%.[%w_]+")
         if start_pos and end_pos then
             vim.highlight.range(buf, highlight_ns, "Underlined", {i + 2 -1, start_pos-1}, {i + 2-1, end_pos}, {})
         end
     end
 
+end
+
+local function stop_job()
+	if job ~= nil then
+        job:shutdown(-69, 15)
+
+        if job ~= nil then
+            vim.print("Sent SIGKILL")
+            job:shutdown(-69, 9)
+        end
+
+		vim.schedule(function()
+			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation terminated forcefully"})
+			local start_pos, end_pos = string.find(vim.api.nvim_buf_get_lines(buf, -2, -1, false)[1], "terminated forcefully")
+			local line_num = vim.api.nvim_buf_line_count(buf)
+			vim.highlight.range(buf, highlight_ns, "DiagnosticError", {line_num - 1, start_pos - 1}, {line_num - 1, end_pos}, {})
+
+			vim.api.nvim_buf_call(buf, function()
+				vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), {vim.api.nvim_buf_line_count(buf), 0})
+			end)
+		end)
+	else
+		vim.print("Job isn't running")
+	end
 end
 
 -- Function to execute a command asynchronously using plenary.job
@@ -87,6 +118,10 @@ local function run_command(command)
     vim.api.nvim_buf_set_lines(buf, 0, 2, false, {"Running command: " .. binary .. " " .. table.concat(args, " ") .. " (CWD: " .. vim.fn.getcwd() .." )", ""})
     vim.highlight.range(buf, highlight_ns, "Italic", {0, 0}, {0, vim.fn.col("$")}, {})
 
+    if job ~= nil then
+        stop_job()
+    end
+
     job = Job:new({
         command = binary,
         args = args,
@@ -99,7 +134,7 @@ local function run_command(command)
         on_stderr = function(err, output)
             add_output(output)
         end,
-        on_exit = function(j, return_val)
+        on_exit = function(j, return_val, signal)
             if return_val == 0 then
                 vim.schedule(function()
                     vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Compilation finished" })
@@ -113,7 +148,12 @@ local function run_command(command)
                 end)
             else 
                 vim.schedule(function()
-                    vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Compilation exited abnormally with code " .. return_val })
+                    if signal ~= 0 then
+                        vim.uv.kill(j.pid,signal) -- for some reason plenary doesn't actually send the signal, seems like a bug
+                        vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Compilation exited abnormally with code " .. return_val .. " signal " .. signal})
+                    else
+                        vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "", "Compilation exited abnormally with code " .. return_val })
+                    end
                     local start_pos, end_pos = string.find(vim.api.nvim_buf_get_lines(buf, -2, -1, false)[1], "exited abnormally")
                     local line_num = vim.api.nvim_buf_line_count(buf)
                     vim.highlight.range(buf, highlight_ns, "DiagnosticError", {line_num - 1, start_pos - 1}, {line_num - 1, end_pos}, {})
@@ -125,34 +165,24 @@ local function run_command(command)
                 end)
             end
             vim.schedule(highlight_buffer)
+            job = nil
         end
     })
 	job:start()
 end
 
-local function stop_job()
-	if job ~= nil then
-		job:shutdown(-69, 15)
 
-		vim.schedule(function()
-			vim.api.nvim_buf_set_lines(buf, -1, -1, false, { "Compilation terminated forcefully"})
-			local start_pos, end_pos = string.find(vim.api.nvim_buf_get_lines(buf, -2, -1, false)[1], "terminated forcefully")
-			local line_num = vim.api.nvim_buf_line_count(buf)
-			vim.highlight.range(buf, highlight_ns, "DiagnosticError", {line_num - 1, start_pos - 1}, {line_num - 1, end_pos}, {})
-
-			vim.api.nvim_buf_call(buf, function()
-				vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), {vim.api.nvim_buf_line_count(buf), 0})
-			end)
-		end)
-	else
-		vim.print("Job isn't running")
-	end
-end
-
-local function goto_error()
+local function goto_file()
     local line = vim.api.nvim_get_current_line()
-    local file, line_num, col = string.match(line, "([%s?:?%w_%-/\\%.~]+%.[%w_]+)[%(:](%d+)[%):(%d+)]")
+    local file, line_num, col = string.match(line, "([%s?:?%w_%-/\\%.~]+%.[%w_]+)[%(:]?[(%d+)]?[%):(%d+)]?")
     if file and line then
+        if line_num == nil or line_num == "" then
+            line_num = string.match(line, "line (%d+)") or 0
+        end
+        if col == nil then
+            col = 0
+        end
+        vim.print("Going to " .. line_num .. " : " .. col)
         local target_buf = find_buffer_by_name(file)
         if target_buf == -1 then
             target_buf = vim.fn.bufadd(file)
@@ -220,7 +250,6 @@ end
 function CompilationPlugin.compile()
     vim.ui.input({ prompt = 'Enter compilation command: ' }, function(input)
         if input then
-
             local cmd = input
             if not (vim.fn.empty(vim.fn.expand("%")) == 1) then
                 vim.cmd("w")
@@ -254,7 +283,7 @@ function CompilationPlugin.next_error()
 end
 
 function CompilationPlugin.goto_error()
-    goto_error()
+    goto_file()
 end
 
 -- Autocommand to close if the compile window is the last one open
@@ -280,12 +309,6 @@ vim.api.nvim_create_autocmd("QuitPre", {
     end
 })
 
-vim.api.nvim_buf_set_keymap(buf, 'n', '<2-LeftMouse>', '', {
-    noremap = true,
-    callback = function()
-        CompilationPlugin.goto_error()
-    end
-})
 
 vim.keymap.set('n', '<leader>ct', function()
     CompilationPlugin.toggle_window()

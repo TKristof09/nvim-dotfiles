@@ -1,8 +1,8 @@
 local ensure_packer = function()
     local fn = vim.fn
-    local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+    local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
     if fn.empty(fn.glob(install_path)) > 0 then
-        fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+        fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
         vim.cmd [[packadd packer.nvim]]
         return true
     end
@@ -36,10 +36,9 @@ return packer.startup(function(use)
     use "wbthomason/packer.nvim" -- have packer update itself
     use "nvim-lua/plenary.nvim"
 
-    use {"nvim-telescope/telescope.nvim"}
-    use {'nvim-telescope/telescope-ui-select.nvim' }
+    use { "nvim-telescope/telescope.nvim" }
+    use { 'nvim-telescope/telescope-ui-select.nvim' }
     use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' }
-    use "nvim-tree/nvim-tree.lua"
     use "nvim-tree/nvim-web-devicons"
     -- lazy.nvim
     use {
@@ -106,22 +105,25 @@ return packer.startup(function(use)
         requires = "neovim/nvim-lspconfig"
     }
 
-    use {'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async'}
+    use { 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async' }
 
     use {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
-        requires = { {"nvim-lua/plenary.nvim"} }
+        requires = { { "nvim-lua/plenary.nvim" } }
     }
 
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate',
-        commit="9d39f00a9559cf3505d73b486c0b8055a6db4215",
+        commit = "9d39f00a9559cf3505d73b486c0b8055a6db4215",
         lock = true,
     }
     use "HiPhish/rainbow-delimiters.nvim"
     use "mbbill/undotree"
+
+    use "stevearc/oil.nvim"
+    use "m00qek/baleia.nvim"
 
     use('mrjones2014/smart-splits.nvim')
 

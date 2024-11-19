@@ -11,25 +11,77 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
         vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
         vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
-        vim.keymap.set("n", "<C-O>", ":ClangdSwitchSourceHeader<CR>", opts)
+
         vim.keymap.set('n', '<leader>ps', function () vim.diagnostic.open_float() end, opts)
         vim.keymap.set('n', '<leader>pn', function () vim.diagnostic.goto_next() end, opts)
         vim.keymap.set('n', '<leader>pp', function () vim.diagnostic.goto_prev() end, opts)
+        vim.keymap.set('n', '<leader>pq', function () vim.diagnostic.setqflist() end, opts)
+
         vim.keymap.set('n', '<leader>lf', function () vim.lsp.buf.format() end, opts)
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+        if client.name == "clangd" then
+            vim.keymap.set("n", "<C-O>", ":ClangdSwitchSourceHeader<CR>", opts)
+        end
+        if client.name == "ocamllsp" then
+            vim.keymap.set("n", "<C-O>", function ()
+                vim.lsp.buf.code_action({
+                    filter = function (x)
+                        return string.find(x.title, "Open .*%.ml") ~= nil
+                    end,
+                    apply = true
+                })
+            end , opts)
+            vim.keymap.set("n", "<C-p>", function ()
+                if vim.bo.modified then
+                    vim.notify "Save before trying to promote"
+                    return
+                end
+
+                local fsevent = assert(vim.uv.new_fs_event())
+                local path = vim.fn.expand "%:p"
+                fsevent:start(path, {}, function(err, _)
+                    fsevent:stop()
+                    fsevent:close()
+
+                    if err then
+                        print("Oh no, an error", vim.inspect(err))
+                        return
+                    end
+                    vim.defer_fn(vim.cmd.checktime, 100)
+                end)
+
+                vim.lsp.buf.code_action {
+                    filter = function(x)
+                        return string.find(x.title, "Promote") ~= nil
+                    end,
+                    apply = true,
+                }
+            end, opts)
+        end
+
         if client.server_capabilities.documentSymbolProvider then
             require('nvim-navic').attach(client, event.buf)
         end
         --- Guard against servers without the signatureHelper capability
         if client.server_capabilities.codeLensProvider then
             vim.lsp.codelens.refresh()
-            vim.api.nvim_create_autocmd("InsertLeave", {
-            desc = "Codelens refresh",
-            buffer = event.buf,
-            callback = function (_)
-                vim.lsp.codelens.refresh({bufnr = event.buf})
-            end
+            vim.api.nvim_create_autocmd({"InsertLeave", "CursorHold"}, {
+                desc = "Codelens refresh",
+                buffer = event.buf,
+                callback = function (_)
+                    vim.lsp.codelens.refresh({bufnr = event.buf})
+                end
+            })
+        end
+        if client.server_capabilities.documentFormattingProvider then 
+            -- format on save autocmd
+            vim.api.nvim_create_autocmd({"BufWritePre"},
+            {
+                desc = "LSP autoformat",
+                buffer = event.buf,
+                callback = function() vim.lsp.buf.format() end
             })
         end
 
