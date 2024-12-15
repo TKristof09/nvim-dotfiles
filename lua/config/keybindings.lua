@@ -66,6 +66,6 @@ vim.keymap.set("n", "<C-j>", "<C-O>", opts)
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "help",
     callback = function()
-        vim.keyvim.keymap.set.set('n', 'gd', '<C-]>', { buffer = true, silent = true }, opts)
+        vim.keymap.set('n', 'gd', '<C-]>', { buffer = true, silent = true }, opts)
     end,
 })
