@@ -8,8 +8,12 @@ return {
             label = {
                 exclude = "jJqQ",
                 rainbow = {
-                    enabled = true,
+                    enabled = false,
+                    shade = 4
                 }
+            },
+            highlight = {
+                matches = false
             },
             modes = {
                 char = {

@@ -28,3 +28,10 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt_local.conceallevel = 0
     end,
 })
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+    pattern = "*.ml,*.mli",
+    callback = function()
+        vim.opt.iskeyword = "@,48-57,_,192-255,'"
+    end,
+})

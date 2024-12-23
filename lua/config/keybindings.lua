@@ -69,3 +69,6 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.keymap.set('n', 'gd', '<C-]>', { buffer = true, silent = true }, opts)
     end,
 })
+
+vim.keymap.set("n", "<leader>xf", "<cmd>luafile %<CR>")
+vim.keymap.set("v", "<leader>x", ":lua<CR>")

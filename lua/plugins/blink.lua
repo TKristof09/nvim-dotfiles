@@ -20,6 +20,11 @@ return {
                 ['<C-b>'] = { "snippet_backward", "fallback" },
             },
 
+            -- workaround for blink erroring out in command line window (Ctrl-F window) when an lsp has been loaded already
+            enabled = function()
+                return vim.bo.buftype ~= "prompt" and vim.b.completion ~= false and
+                    (vim.bo.filetype ~= "vim" or vim.bo.buftype ~= "nofile")
+            end,
             appearance = {
                 -- Sets the fallback highlight groups to nvim-cmp's highlight groups
                 -- Useful for when your theme doesn't support blink.cmp
@@ -39,7 +44,6 @@ return {
                     winhighlight = 'Normal:CmpMenu,FloatBorder:CmpMenu,CursorLine:CmpSelect,Search:None',
 
                 },
-
                 documentation = {
                     auto_show = true,
                     auto_show_delay_ms = 0,

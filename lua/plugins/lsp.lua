@@ -28,6 +28,7 @@ return {
         config = function()
             vim.lsp.inlay_hint.enable(true)
             -- require("lspkind").init()
+            vim.lsp.set_log_level("TRACE")
 
             vim.api.nvim_create_autocmd('LspAttach', {
                 desc = 'LSP actions',
@@ -142,7 +143,6 @@ return {
                     return ftype
                 end,
             })
-            -- vim.lsp.set_log_level("TRACE")
 
             require('mason-lspconfig').setup({
                 ensure_installed = {},
