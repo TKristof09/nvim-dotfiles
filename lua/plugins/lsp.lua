@@ -133,10 +133,10 @@ return {
                 filetypes = {
                     "ocaml",
                     "ocaml.interface",
-                    "ocaml.menhir",
                     "ocaml.cram",
                     "ocaml.mlx",
-                    "ocaml.ocamllex",
+                    -- "ocaml.menhir",
+                    -- "ocaml.ocamllex",
                     "reason",
                 },
                 get_language_id = function(_, ftype)

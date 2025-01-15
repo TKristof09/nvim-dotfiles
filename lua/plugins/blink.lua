@@ -42,11 +42,20 @@ return {
                     },
 
                     winhighlight = 'Normal:CmpMenu,FloatBorder:CmpMenu,CursorLine:CmpSelect,Search:None',
-
                 },
                 documentation = {
                     auto_show = true,
                     auto_show_delay_ms = 0,
+                },
+                list = {
+                    selection = {
+                        auto_insert = false,
+                    }
+                },
+                accept = {
+                    auto_brackets = {
+                        enabled = false,
+                    },
                 },
             },
             signature = { enabled = true },
