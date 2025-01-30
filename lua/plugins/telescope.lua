@@ -37,20 +37,20 @@ return {
             require('telescope').load_extension('fzf')
 
             local builtin = require("telescope.builtin")
-            vim.keymap.set('n', '<leader>fs', function()
-                builtin.find_files()
-            end, {})
-            vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
-            vim.keymap.set('n', '<leader>g', builtin.live_grep, {})
-            vim.keymap.set('n', '<leader>b', builtin.buffers, {})
-            vim.keymap.set('n', '<leader>j', builtin.jumplist, {})
+            vim.keymap.set('n', '<leader>fs', function() builtin.find_files({ no_ignore = true }) end,
+                { desc = "Telescope: Find files" })
+            vim.keymap.set('n', '<leader>fg', builtin.git_files, { desc = "Telescope: Git files" })
+            vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = "Telescope: Live grep" })
+            vim.keymap.set('n', '<leader>b', builtin.buffers, { desc = "Telescope: Buffers" })
+            vim.keymap.set('n', '<leader>j', builtin.jumplist, { desc = "Telescope: Jumplist" })
 
 
-            vim.keymap.set('n', '<leader>pa', builtin.diagnostics, {})
-            vim.keymap.set('n', '<leader>fr', builtin.lsp_references, {})
-            vim.keymap.set('n', '<leader>ss', builtin.lsp_document_symbols, {})
+            vim.keymap.set('n', '<leader>pa', builtin.diagnostics, { desc = "Telescope: Diagnostics" })
+            vim.keymap.set('n', '<leader>fr', builtin.lsp_references, { desc = "Telescope: Find references" })
+            vim.keymap.set('n', '<leader>ss', builtin.lsp_document_symbols, { desc = "Telescope: Document symbols" })
 
-            vim.keymap.set('n', '<leader>sh', builtin.help_tags, {})
+            vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = "Telescope: Help tags" })
+            vim.keymap.set('n', '<leader>tr', builtin.resume, { desc = "Telescope: Resume" })
         end,
 
         lazy = true,

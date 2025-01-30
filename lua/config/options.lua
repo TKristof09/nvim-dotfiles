@@ -15,7 +15,7 @@ o.belloff = "all"
 o.encoding = "utf-8"
 o.fileencoding = "utf-8"
 o.scrolloff = 5
-o.laststatus = 2
+o.laststatus = 3
 o.title = true
 o.splitbelow = true
 o.splitright = true
@@ -27,7 +27,8 @@ o.hlsearch = false
 o.incsearch = true
 o.showmatch = true
 
-o.foldmethod = "indent"
+o.foldmethod = "expr"
+o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 o.foldlevel = 99
 
 o.background = "dark"
@@ -41,33 +42,32 @@ o.cindent = true
 o.signcolumn = "number" -- prevent text from being shifted when a diagnostic appears
 o.updatetime = 300
 
-o.viewoptions:remove({"options"})
+o.viewoptions:remove({ "options" })
 
 o.showtabline = 0
 
 o.showmode = false -- we use lualine for this, so disablig it makes noice only show macro recording in the statusline
 o.tildeop = true
 
-
+o.cmdheight = 0
 
 
 if vim.fn.has("win32") == 1 then
-    o.shell = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-    o.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command"
+    o.shell = "c:\\windows\\system32\\windowspowershell\\v1.0\\powershell.exe"
+    o.shellcmdflag = "-nologo -noprofile -executionpolicy remotesigned -command"
     o.shellquote = ""
     o.shellxquote = ""
 end
 
 -- disable background color erase
 vim.cmd [[
-    if $TERM == "xterm-kitty"
+    if $term == "xterm-kitty"
 	  let &t_ut=''
 	  set termguicolors
 				let &t_8f = "\e[38;2;%lu;%lu;%lum"
 				let &t_8b = "\e[48;2;%lu;%lu;%lum"
-		hi Normal guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE
+		hi normal guifg=none guibg=none ctermfg=none ctermbg=none
 		let &t_ti = &t_ti . "\033]10;#f6f3e8\007\033]11;#242424\007"
 		let &t_te = &t_te . "\033]110\007\033]111\007"
 	endif
     ]]
-

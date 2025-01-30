@@ -1,5 +1,12 @@
 return {
     {
+        'saghen/blink.compat',
+        -- use the latest release, via version = '*', if you also use the latest release for blink.cmp
+        version = '*',
+        lazy = true,
+        opts = {},
+    },
+    {
         'saghen/blink.cmp',
         lazy = true,
         event = "VeryLazy",
@@ -7,7 +14,7 @@ return {
         version = 'v0.*',
         opts = {
             keymap = {
-                preset = nil,
+                preset = "none",
                 ['<CR>'] = { "fallback" }, --otherwise enter gets mapped to something
                 ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
                 ['<C-l>'] = { "select_prev" },
@@ -41,11 +48,15 @@ return {
                         columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
                     },
 
-                    winhighlight = 'Normal:CmpMenu,FloatBorder:CmpMenu,CursorLine:CmpSelect,Search:None',
+                    -- winhighlight = 'Normal:CmpMenu,FloatBorder:CmpMenu,CursorLine:CmpSelect,Search:None',
                 },
                 documentation = {
                     auto_show = true,
                     auto_show_delay_ms = 0,
+                    update_delay_ms = 0,
+                    window = {
+                        border = "padded",
+                    }
                 },
                 list = {
                     selection = {
@@ -61,8 +72,27 @@ return {
             signature = { enabled = true },
 
             sources = {
-                default = { 'lsp', 'path', 'snippets', 'buffer' },
+                default = {
+                    "lazydev",
+                    "lsp",
+                    "path",
+                    "snippets",
+                    "buffer",
+                    -- 'copilot_chat',
+                    "avante_commands",
+                    "avante_mentions",
+                    "avante_files",
+                },
+                per_filetype = {
+                    codecompanion = { "codecompanion" }
+                },
                 providers = {
+                    lazydev = {
+                        name = "LazyDev",
+                        module = "lazydev.integrations.blink",
+                        -- make lazydev completions top priority (see `:h blink.cmp`)
+                        score_offset = 100,
+                    },
                     path = {
                         opts = {
                             show_hidden_files_by_default = true,
@@ -72,6 +102,28 @@ return {
                         opts = {
                             friendly_snippets = false,
                         },
+                    },
+                    -- copilot_chat = {
+                    --     name = "copilot_chat",
+                    --     module = "copilot_chat_provider",
+                    -- },
+                    avante_commands = {
+                        name = "avante_commands",
+                        module = "blink.compat.source",
+                        score_offset = 90, -- show at a higher priority than lsp
+                        opts = {},
+                    },
+                    avante_files = {
+                        name = "avante_files",
+                        module = "blink.compat.source",
+                        score_offset = 100, -- show at a higher priority than lsp
+                        opts = {},
+                    },
+                    avante_mentions = {
+                        name = "avante_mentions",
+                        module = "blink.compat.source",
+                        score_offset = 1000, -- show at a higher priority than lsp
+                        opts = {},
                     }
                 }
             },

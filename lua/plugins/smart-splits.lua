@@ -99,10 +99,14 @@ return {
             vim.keymap.set('n', '<C-Up>', require('smart-splits').move_cursor_up)
             vim.keymap.set('n', '<C-Right>', require('smart-splits').move_cursor_right)
             -- swapping buffers between windows
-            vim.keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left)
-            vim.keymap.set('n', '<leader><leader>a', require('smart-splits').swap_buf_down)
-            vim.keymap.set('n', '<leader><leader>e', require('smart-splits').swap_buf_up)
-            vim.keymap.set('n', '<leader><leader>i', require('smart-splits').swap_buf_right)
+            vim.keymap.set('n', '<leader><leader>h', require('smart-splits').swap_buf_left,
+                { desc = 'Swap buffer with left window' })
+            vim.keymap.set('n', '<leader><leader>a', require('smart-splits').swap_buf_down,
+                { desc = 'Swap buffer with lower window' })
+            vim.keymap.set('n', '<leader><leader>e', require('smart-splits').swap_buf_up,
+                { desc = 'Swap buffer with upper window' })
+            vim.keymap.set('n', '<leader><leader>i', require('smart-splits').swap_buf_right,
+                { desc = 'Swap buffer with right window' })
         end,
         lazy = true,
         event = "VeryLazy"

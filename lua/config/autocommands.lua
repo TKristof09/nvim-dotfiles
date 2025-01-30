@@ -2,7 +2,7 @@
 vim.api.nvim_create_autocmd({ "FocusLost" },
     {
         pattern = { "*" },
-        command = "wa"
+        command = "silent! wa"
     })
 
 vim.api.nvim_create_autocmd({ "TermOpen" },

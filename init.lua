@@ -1,4 +1,4 @@
-require("config.monokai") -- need to be before lualine for the auto theme to work
+vim.cmd("colorscheme monokai")
 require("config.options")
 require("config.keybindings")
 require("config.autocommands")
@@ -14,3 +14,6 @@ vim.filetype.add {
         t = "ocaml.cram",
     },
 }
+
+-- workaround https://github.com/neovim/neovim/issues/31675
+vim.hl = vim.highlight

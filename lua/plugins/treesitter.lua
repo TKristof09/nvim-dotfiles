@@ -3,7 +3,7 @@ return {
         'nvim-treesitter/nvim-treesitter',
         build = ":TSUpdate",
         opts = {
-            ensure_installed = { "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
+            ensure_installed = { "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "ocaml", "ocaml_interface" },
             highlight = {
                 enable = true,
                 disable = { "c", "rust" },

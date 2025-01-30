@@ -1,3 +1,5 @@
+---@format disable
+-- TODO do stuff
 local white       = "#E8E8E3"
 local white2      = "#d8d8d3"
 local black       = "#272822"
@@ -43,6 +45,8 @@ local darkblue    = "#3b8af7"
 
 local addbg       = "#2C7027"
 local delbg       = "#822325"
+
+local bg_float    = "#292433"  -- warmer dark background
 -- Highlighting
 -- ------------
 
@@ -80,14 +84,14 @@ vim.api.nvim_set_hl(0, "SpellLocal",    { fg = pink,                            
 
 -- misc
 vim.api.nvim_set_hl(0, "SpecialKey",    { fg = pink })
-vim.api.nvim_set_hl(0, "Title",         { fg = yellow })
+vim.api.nvim_set_hl(0, "Title",         { fg = aqua })
 vim.api.nvim_set_hl(0, "Directory",     { fg = aqua })
 
 -- diff
 vim.api.nvim_set_hl(0, "DiffAdd",       { fg = addfg,      bg = addbg })
 vim.api.nvim_set_hl(0, "DiffDelete",    { fg = black,      bg = delbg })
 vim.api.nvim_set_hl(0, "DiffChange",    { fg = changefg,   bg = changebg })
-vim.api.nvim_set_hl(0, "DiffText",      { fg = black,      bg = aqua })
+vim.api.nvim_set_hl(0, "DiffText",      { fg = white,      bg = darkblue })
 
 -- fold
 vim.api.nvim_set_hl(0, "Folded",        { fg = warmgrey,   bg = darkblack })
@@ -183,23 +187,24 @@ vim.api.nvim_set_hl(0, "vkType",                      { fg = greenishblue})
 
 
 
-vim.api.nvim_set_hl(0, "CmpItemAbbrMatch",            { fg = red})
-vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", {link = "CmpItemAbbrMatch"})
+vim.api.nvim_set_hl(0, "BlinkCmpItemAbbrMatch",            { fg = red})
+vim.api.nvim_set_hl(0, "BlinkCmpItemAbbrMatchFuzzy", {link = "CmpItemAbbrMatch"})
 
-vim.api.nvim_set_hl(0, "CmpItemKindClass", {link = "Structure"})
-vim.api.nvim_set_hl(0, "CmpItemKindStruct", {link = "Structure"})
-vim.api.nvim_set_hl(0, "CmpItemKindFunction", {link = "Function"})
-vim.api.nvim_set_hl(0, "CmpItemKindMethod", {link = "Method"})
-vim.api.nvim_set_hl(0, "CmpItemKindConstructor", {link = "Structure"})
-vim.api.nvim_set_hl(0, "CmpItemKindVariable", {link = "Variable"})
-vim.api.nvim_set_hl(0, "CmpItemKindField", {link = "Field"})
-vim.api.nvim_set_hl(0, "CmpItemKindProperty", {link = "Property"})
-vim.api.nvim_set_hl(0, "CmpItemKindKeyword", {link = "Keyword"})
+vim.api.nvim_set_hl(0, "BlinkCmpKindClass", {link = "Structure"})
+vim.api.nvim_set_hl(0, "BlinkCmpKindStruct", {link = "Structure"})
+vim.api.nvim_set_hl(0, "BlinkCmpKindFunction", {link = "Function"})
+vim.api.nvim_set_hl(0, "BlinkCmpKindMethod", {link = "Method"})
+vim.api.nvim_set_hl(0, "BlinkCmpKindConstructor", {link = "Structure"})
+vim.api.nvim_set_hl(0, "BlinkCmpKindVariable", {link = "Variable"})
+vim.api.nvim_set_hl(0, "BlinkCmpKindField", {link = "Field"})
+vim.api.nvim_set_hl(0, "BlinkCmpKindProperty", {link = "Property"})
+vim.api.nvim_set_hl(0, "BlinkCmpKindKeyword", {link = "Keyword"})
 
-vim.api.nvim_set_hl(0, "CmpMenu",                     { fg = white, bg = bg_cmp})
-vim.api.nvim_set_hl(0, "CmpSelect",                   { fg = black, bg = blue})
-vim.api.nvim_set_hl(0, "NormalFloat", {link = "CmpMenu"})
-vim.api.nvim_set_hl(0, "FloatBorder", {link = "CmpMenu"})
+vim.api.nvim_set_hl(0, "BlinkCmpMenu",                     { fg = white, bg = bg_cmp})
+vim.api.nvim_set_hl(0, "BlinkCmpSelect",                   { fg = black, bg = blue})
+
+vim.api.nvim_set_hl(0, "NormalFloat", {fg = white2, bg = bg_float})
+vim.api.nvim_set_hl(0, "FloatBorder", {fg = aqua, bg = bg_float})
 
 vim.api.nvim_set_hl(0, "IblIndent",         { fg = darkgrey})
 vim.api.nvim_set_hl(0, "IblWhitespace",    { fg = darkgrey})
@@ -221,4 +226,3 @@ vim.api.nvim_set_hl(0, "NoiceCmdlinePopupTitle", {fg = aqua})
 vim.api.nvim_set_hl(0, "NoiceConfirmBorder", {fg = aqua})
 vim.api.nvim_set_hl(0, "NoiceCmdlineIconSearch", {fg = orange})
 vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderSearch", {fg = orange})
-

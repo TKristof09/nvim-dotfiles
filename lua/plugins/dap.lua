@@ -19,23 +19,23 @@ return {
             require('telescope').load_extension('dap')
 
 
-            vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint)
-            vim.keymap.set("n", "<leader>drc", dap.run_to_cursor)
+            vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "DAP: Toggle Breakpoint" })
+            vim.keymap.set("n", "<leader>drc", dap.run_to_cursor, { desc = "DAP: Run to Cursor" })
 
             -- Eval var under cursor
             vim.keymap.set("n", "<leader>de", function()
                 require("dapui").eval(nil, { enter = true })
-            end)
+            end, { desc = "DAP: Evaluate" })
 
-            vim.keymap.set("n", "<leader>dc", dap.continue)
-            vim.keymap.set("n", "<leader>dsi", dap.step_into)
-            vim.keymap.set("n", "<leader>dso", dap.step_over)
-            vim.keymap.set("n", "<leader>dsu", dap.step_out)
-            vim.keymap.set("n", "<F10>", dap.step_over)
-            vim.keymap.set("n", "<F11>", dap.step_into)
-            vim.keymap.set("n", "<F12>", dap.step_out)
-            vim.keymap.set("n", "<leader>dr", dap.restart)
-            vim.keymap.set("n", "<leader>dq", dap.terminate)
+            vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "DAP: Continue" })
+            vim.keymap.set("n", "<leader>dsi", dap.step_into, { desc = "DAP: Step Into" })
+            vim.keymap.set("n", "<leader>dso", dap.step_over, { desc = "DAP: Step Over" })
+            vim.keymap.set("n", "<leader>dsu", dap.step_out, { desc = "DAP: Step Out" })
+            vim.keymap.set("n", "<F10>", dap.step_over, { desc = "DAP: Step Over" })
+            vim.keymap.set("n", "<F11>", dap.step_into, { desc = "DAP: Step Into" })
+            vim.keymap.set("n", "<F12>", dap.step_out, { desc = "DAP: Step Out" })
+            vim.keymap.set("n", "<leader>dr", dap.restart, { desc = "DAP: Restart" })
+            vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "DAP: Terminate" })
 
             dap.listeners.before.attach.dapui_config = function()
                 ui.open()
@@ -77,8 +77,7 @@ return {
                             pickers
                                 .new(opts, {
                                     prompt_title = "Path to executable",
-                                    finder = finders.new_oneshot_job({ "find", "-name", "*.bc" },
-                                        {}),
+                                    finder = finders.new_oneshot_job({ "fd", "--no-ignore", "-e", "bc" }, {}),
                                     sorter = conf.generic_sorter(opts),
                                     attach_mappings = function(buffer_number)
                                         actions.select_default:replace(function()
@@ -176,4 +175,3 @@ return {
         end,
     },
 }
-

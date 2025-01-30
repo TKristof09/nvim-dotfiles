@@ -1,3 +1,9 @@
+local autoformat_disabled = {
+    "ocaml.cram",
+    "ocaml.menhir",
+    "ocaml.ocamllex",
+}
+
 return {
     {
         "williamboman/mason.nvim",
@@ -33,26 +39,43 @@ return {
             vim.api.nvim_create_autocmd('LspAttach', {
                 desc = 'LSP actions',
                 callback = function(event)
-                    local opts = { buffer = event.buf, remap = false, silent = true }
+                    local function get_opts(overrides)
+                        local opts = { buffer = event.buf, remap = false, silent = true }
+                        local overrides = overrides or {}
+                        return vim.tbl_extend("force", opts, overrides)
+                    end
 
-                    vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-                    vim.keymap.set("n", "gt", function() vim.lsp.buf.type_definition() end, opts)
-                    vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
-                    vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
-                    vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
-                    vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
+                    vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end,
+                        get_opts({ desc = "LSP: Go to definition" }))
+                    vim.keymap.set("n", "gt", function() vim.lsp.buf.type_definition() end,
+                        get_opts({ desc = "LSP: Go to type definition" }))
+                    vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end,
+                        get_opts({ desc = "LSP: Hover documentation" }))
+                    vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end,
+                        get_opts({ desc = "LSP: Rename symbol" }))
+                    vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end,
+                        get_opts({ desc = "LSP: Show signature help" }))
+                    vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end,
+                        get_opts({ desc = "LSP: Code actions" }))
 
-                    vim.keymap.set('n', '<leader>ps', function() vim.diagnostic.open_float() end, opts)
-                    vim.keymap.set('n', '<leader>pn', function() vim.diagnostic.goto_next() end, opts)
-                    vim.keymap.set('n', '<leader>pp', function() vim.diagnostic.goto_prev() end, opts)
-                    vim.keymap.set('n', '<leader>pq', function() vim.diagnostic.setqflist() end, opts)
+                    vim.keymap.set('n', '<leader>ps', function() vim.diagnostic.open_float() end,
+                        get_opts({ desc = "LSP: Show diagnostics" }))
+                    vim.keymap.set('n', '<leader>pn', function() vim.diagnostic.goto_next() end,
+                        get_opts({ desc = "LSP: Next diagnostic" }))
+                    vim.keymap.set('n', '<leader>pp', function() vim.diagnostic.goto_prev() end,
+                        get_opts({ desc = "LSP: Previous diagnostic" }))
+                    vim.keymap.set('n', '<leader>pq', function() vim.diagnostic.setqflist() end,
+                        get_opts({ desc = "LSP: Send diagnostics to quickfix" }))
 
-                    vim.keymap.set('n', '<leader>lf', function() vim.lsp.buf.format() end, opts)
+                    vim.keymap.set('n', '<leader>lf', function() vim.lsp.buf.format() end,
+                        get_opts({ desc = "LSP: Format buffer" }))
 
                     local client = vim.lsp.get_client_by_id(event.data.client_id)
+                    if client == nil then return end
 
                     if client.name == "clangd" then
-                        vim.keymap.set("n", "<C-O>", ":ClangdSwitchSourceHeader<CR>", opts)
+                        vim.keymap.set("n", "<C-O>", ":ClangdSwitchSourceHeader<CR>",
+                            get_opts({ desc = "LSP: Open header" }))
                     end
                     if client.name == "ocamllsp" then
                         vim.keymap.set("n", "<C-O>", function()
@@ -62,33 +85,34 @@ return {
                                 end,
                                 apply = true
                             })
-                        end, opts)
+                        end, get_opts({ desc = "LSP: Open header" }))
                         vim.keymap.set("n", "<C-p>", function()
-                            if vim.bo.modified then
-                                vim.notify "Save before trying to promote"
-                                return
-                            end
-
-                            local fsevent = assert(vim.uv.new_fs_event())
-                            local path = vim.fn.expand "%:p"
-                            fsevent:start(path, {}, function(err, _)
-                                fsevent:stop()
-                                fsevent:close()
-
-                                if err then
-                                    print("Oh no, an error", vim.inspect(err))
-                                    return
-                                end
-                                vim.defer_fn(vim.cmd.checktime, 100)
-                            end)
-
-                            vim.lsp.buf.code_action {
-                                filter = function(x)
-                                    return string.find(x.title, "Promote") ~= nil
-                                end,
-                                apply = true,
-                            }
-                        end, opts)
+                            -- if vim.bo.modified then
+                            --     vim.notify "Save before trying to promote"
+                            --     return
+                            -- end
+                            --
+                            -- local fsevent = assert(vim.uv.new_fs_event())
+                            -- local path = vim.fn.expand "%:p"
+                            -- fsevent:start(path, {}, function(err, _)
+                            --     fsevent:stop()
+                            --     fsevent:close()
+                            --
+                            --     if err then
+                            --         print("Oh no, an error", vim.inspect(err))
+                            --         return
+                            --     end
+                            --     vim.defer_fn(vim.cmd.checktime, 100)
+                            -- end)
+                            --
+                            -- vim.lsp.buf.code_action {
+                            --     filter = function(x)
+                            --         return string.find(x.title, "Promote") ~= nil
+                            --     end,
+                            --     apply = true,
+                            -- }
+                            vim.cmd("silent! !dune promote %:.")
+                        end, get_opts({ desc = "LSP: Promote file" }))
                     end
 
                     if client.server_capabilities.documentSymbolProvider then
@@ -111,7 +135,12 @@ return {
                             {
                                 desc = "LSP autoformat",
                                 buffer = event.buf,
-                                callback = function() vim.lsp.buf.format() end
+                                callback = function()
+                                    local ft = vim.filetype.match({ buf = event.buf })
+                                    if not vim.tbl_contains(autoformat_disabled, ft) then
+                                        vim.lsp.buf.format()
+                                    end
+                                end
                             })
                     end
                 end
@@ -133,10 +162,11 @@ return {
                 filetypes = {
                     "ocaml",
                     "ocaml.interface",
+                    "ocaml_interface",
                     "ocaml.cram",
                     "ocaml.mlx",
-                    -- "ocaml.menhir",
-                    -- "ocaml.ocamllex",
+                    "ocaml.menhir",
+                    "ocaml.ocamllex",
                     "reason",
                 },
                 get_language_id = function(_, ftype)
