@@ -22,19 +22,11 @@ return {
         dependencies = {
             "williamboman/mason-lspconfig.nvim",
             "saghen/blink.cmp",
-            -- "hrsh7th/nvim-cmp",
-            -- "hrsh7th/cmp-nvim-lsp",
-            -- "hrsh7th/cmp-buffer",
-            -- "hrsh7th/cmp-path",
-            -- "hrsh7th/cmp-nvim-lua",
-            -- "hrsh7th/cmp-cmdline",
-            -- "onsails/lspkind.nvim",
             "SmiteshP/nvim-navic"
         },
         config = function()
             vim.lsp.inlay_hint.enable(true)
-            -- require("lspkind").init()
-            vim.lsp.set_log_level("TRACE")
+            -- vim.lsp.set_log_level("TRACE")
 
             vim.api.nvim_create_autocmd('LspAttach', {
                 desc = 'LSP actions',
@@ -137,7 +129,7 @@ return {
                                 buffer = event.buf,
                                 callback = function()
                                     local ft = vim.filetype.match({ buf = event.buf })
-                                    if not vim.tbl_contains(autoformat_disabled, ft) then
+                                    if not vim.tbl_contains(autoformat_disabled, ft) and not vim.b.disable_autoformat and not vim.g.disable_autoformat then
                                         vim.lsp.buf.format()
                                     end
                                 end
@@ -225,14 +217,11 @@ return {
                             settings = {
                                 basedpyright = {
                                     analysis = {
-                                        typeCheckingMode = "basic",
                                         autoSearchPaths = true,
+                                        useLibraryCodeForTypes = true,
                                     },
                                 },
-                                python = {
-                                    pythonPath = "venv\\Scripts\\python.exe"
-                                }
-                            }
+                            },
                         })
                     end,
                     lua_ls = function()

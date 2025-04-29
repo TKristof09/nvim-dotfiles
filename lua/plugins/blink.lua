@@ -15,23 +15,18 @@ return {
         opts = {
             keymap = {
                 preset = "none",
-                ['<CR>'] = { "fallback" }, --otherwise enter gets mapped to something
+                ['<CR>'] = { "fallback" }, --otherwise enter gets mapped to something and i cant press enter in insert mode
                 ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
                 ['<C-l>'] = { "select_prev" },
                 ['<C-d>'] = { "select_next" },
                 ['<C-w>'] = { "select_and_accept" },
-                ['<C-x>'] = { "scroll_documentation_up" },
-                ['<C-m>'] = { "scroll_documentation_down" },
+                ['<C-m>'] = { "scroll_documentation_up" },
+                ['<C-x>'] = { "scroll_documentation_down" },
                 -- Navigate between snippet placeholder
                 ['<C-f>'] = { "snippet_forward", "fallback" },
                 ['<C-b>'] = { "snippet_backward", "fallback" },
             },
 
-            -- workaround for blink erroring out in command line window (Ctrl-F window) when an lsp has been loaded already
-            enabled = function()
-                return vim.bo.buftype ~= "prompt" and vim.b.completion ~= false and
-                    (vim.bo.filetype ~= "vim" or vim.bo.buftype ~= "nofile")
-            end,
             appearance = {
                 -- Sets the fallback highlight groups to nvim-cmp's highlight groups
                 -- Useful for when your theme doesn't support blink.cmp
@@ -52,8 +47,8 @@ return {
                 },
                 documentation = {
                     auto_show = true,
-                    auto_show_delay_ms = 0,
-                    update_delay_ms = 0,
+                    auto_show_delay_ms = 50,
+                    update_delay_ms = 50,
                     window = {
                         border = "padded",
                     }
@@ -70,6 +65,20 @@ return {
                 },
             },
             signature = { enabled = true },
+            cmdline = {
+                keymap = {
+                    preset = "none",
+                    ['<CR>'] = { "fallback" }, --otherwise enter gets mapped to something
+                    ['<C-l>'] = { "select_prev" },
+                    ['<C-d>'] = { "select_next" },
+                    ['<C-w>'] = { "select_and_accept" },
+                },
+                completion = {
+                    menu = {
+                        auto_show = true
+                    }
+                }
+            },
 
             sources = {
                 default = {
@@ -96,6 +105,9 @@ return {
                     path = {
                         opts = {
                             show_hidden_files_by_default = true,
+                            get_cwd = function(_)
+                                return vim.fn.getcwd()
+                            end,
                         }
                     },
                     snippets = {

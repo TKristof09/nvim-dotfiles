@@ -68,7 +68,7 @@ return {
                     type = 'ocamlearlybird',
                     request = 'launch',
                     cwd = "${workspaceFolder}",
-                    stopOnEntry = true,
+                    -- stopOnEntry = true,
                     _debugLog = "/home/kristof/dap.log",
                     -- program = '${workspaceFolder}/_build/default/bin/main.bc',
                     program = function()

@@ -1,39 +1,4 @@
 local active_handle = nil
-local function o1_adapter()
-    local adapters = require('codecompanion.adapters')
-
-    -- Extend the Copilot adapter with specific parameters and handlers for o1 models
-    local adapter = adapters.extend('copilot', {
-        opts = { stream = false }, -- Stream not supported
-        schema = {
-            model = {
-                default = 'o1-preview',
-                choices = {
-                    'o1-preview',
-                    'o1-mini',
-                },
-            },
-        },
-        handlers = {
-            ---Handler to remove system prompt from messages
-            form_messages = function(_, messages)
-                return {
-                    messages = vim
-                        .iter(messages)
-                        :filter(function(message) return not (message.role and message.role == 'system') end)
-                        :totable(),
-                }
-            end,
-        },
-    })
-
-    -- Remove unsupported settings from the adapter schema
-    local unsupported_settings = { 'temperature', 'max_tokens', 'top_p', 'n' }
-    vim.iter(unsupported_settings):each(function(setting) adapter.schema[setting] = nil end)
-
-    adapter.name = 'copilot_o1'
-    return adapter
-end
 
 local function azure_deepseek_adapter()
     return require("codecompanion.adapters").extend("deepseek", {
@@ -164,12 +129,17 @@ local function gemini_adapter()
         env = {
             api_key = require("secrets").gemini_api_key,
         },
+
+        opts = {
+            stream = true
+        },
         schema = {
             model = {
-                default = "gemini-2.0-flash-thinking-exp-01-21",
+                default = "gemini-2.0-flash",
                 choices = {
                     "gemini-2.0-flash-thinking-exp-01-21",
-                    "gemini-exp-1206",
+                    "gemini-2.0-flash",
+                    "gemini-2.0-pro-exp-02-05",
                 },
             }
         },
@@ -216,11 +186,13 @@ return {
                         },
                         max_tokens = {
                             default = 8192
+                        },
+                        reasoning_effort = {
+                            default = "high"
                         }
                     }
                 })
             end,
-            copilot_o1 = o1_adapter,
             kluster = kluster_adapter,
             hyperbolic = hyperbolic_adapter,
             azure_deepseek = azure_deepseek_adapter,
@@ -229,7 +201,7 @@ return {
         },
         strategies = {
             chat = {
-                adatper = "huggingface",
+                adapter = "copilot",
                 slash_commands = {
                     ["file"] = {
                         callback = "strategies.chat.slash_commands.file",

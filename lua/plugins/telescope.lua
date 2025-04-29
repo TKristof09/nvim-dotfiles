@@ -39,7 +39,8 @@ return {
             local builtin = require("telescope.builtin")
             vim.keymap.set('n', '<leader>fs', function() builtin.find_files({ no_ignore = true }) end,
                 { desc = "Telescope: Find files" })
-            vim.keymap.set('n', '<leader>fg', builtin.git_files, { desc = "Telescope: Git files" })
+            vim.keymap.set('n', '<leader>fg', function() builtin.git_files({ show_untracked = true }) end,
+                { desc = "Telescope: Git files" })
             vim.keymap.set('n', '<leader>g', builtin.live_grep, { desc = "Telescope: Live grep" })
             vim.keymap.set('n', '<leader>b', builtin.buffers, { desc = "Telescope: Buffers" })
             vim.keymap.set('n', '<leader>j', builtin.jumplist, { desc = "Telescope: Jumplist" })

@@ -108,7 +108,5 @@ return {
             vim.keymap.set('n', '<leader><leader>i', require('smart-splits').swap_buf_right,
                 { desc = 'Swap buffer with right window' })
         end,
-        lazy = true,
-        event = "VeryLazy"
     }
 }

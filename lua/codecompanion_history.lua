@@ -172,7 +172,7 @@ local function create_auto_save_chat(chat_data)
     chat.id = id and tostring(id) or tostring(os.time())
 
     -- Add subscription to save chat on every response from llm
-    chat:subscribe({
+    chat.subscribers:subscribe({
         id = "save_messages",
         callback = function(chat_instance)
             save_chat(chat_instance)
