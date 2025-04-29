@@ -27,4 +27,5 @@ require("lazy").setup({
         enabled = true,
         notify = false,
     },
+    install = { colorscheme = { "monokai" } }
 })

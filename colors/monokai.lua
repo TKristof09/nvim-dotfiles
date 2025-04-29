@@ -1,5 +1,4 @@
 ---@format disable
--- TODO do stuff
 local white       = "#E8E8E3"
 local white2      = "#d8d8d3"
 local black       = "#272822"
@@ -49,20 +48,19 @@ local delbg       = "#822325"
 local bg_float    = "#292433"  -- warmer dark background
 -- Highlighting
 -- ------------
-
 -- editor
 vim.api.nvim_set_hl(0, "Normal",        { fg = white,      bg = bg_blue })
 vim.api.nvim_set_hl(0, "Italic",        { fg = white,      bg = bg_blue, italic = true })
-vim.api.nvim_set_hl(0, "ColorColumn",   {                     bg = lightblack })
+vim.api.nvim_set_hl(0, "ColorColumn",   {                    bg = lightblack })
 vim.api.nvim_set_hl(0, "Cursor",        { fg = black,      bg = white })
-vim.api.nvim_set_hl(0, "CursorColumn",  {                     bg = lightblack2 })
-vim.api.nvim_set_hl(0, "CursorLine",    {                     bg = lightblack2 })
-vim.api.nvim_set_hl(0, "QuickFixLine",  {                     bg = lightgrey })
+vim.api.nvim_set_hl(0, "CursorColumn",  {                    bg = lightblack2 })
+vim.api.nvim_set_hl(0, "CursorLine",    {                    bg = lightblack2 })
+vim.api.nvim_set_hl(0, "QuickFixLine",  {                    bg = lightgrey })
 vim.api.nvim_set_hl(0, "NonText",       { fg = lightgrey })
-vim.api.nvim_set_hl(0, "StatusLine",    { fg = warmgrey,   bg = black,        reverse = true })
+vim.api.nvim_set_hl(0, "StatusLine",    { fg = warmgrey,     bg = black,      reverse = true })
 vim.api.nvim_set_hl(0, "StatusLineNC",  { fg = darkgrey,   bg = warmgrey,     reverse = true })
 vim.api.nvim_set_hl(0, "TabLine",       { fg = white,      bg = darkblack,    reverse = true })
-vim.api.nvim_set_hl(0, "Visual",        {                     bg = lightgrey })
+vim.api.nvim_set_hl(0, "Visual",        {                    bg = lightgrey })
 vim.api.nvim_set_hl(0, "Search",        { fg = black,      bg = br_yellow })
 vim.api.nvim_set_hl(0, "MatchParen",    { fg = purple,                           underline = true,bold = true, })
 vim.api.nvim_set_hl(0, "Question",      { fg = yellow })
@@ -76,12 +74,6 @@ vim.api.nvim_set_hl(0, "CursorLineNr",  { fg = orange,     bg = bg_blue })
 vim.api.nvim_set_hl(0, "SignColumn",    {                     bg = bg_blue })
 vim.api.nvim_set_hl(0, "Conceal",       { fg = grey})
 
--- spell
-vim.api.nvim_set_hl(0, "SpellBad",      { fg = red,                              underline = true })
-vim.api.nvim_set_hl(0, "SpellCap",      { fg = purple,                           underline = true })
-vim.api.nvim_set_hl(0, "SpellRare",     { fg = aqua,                             underline = true })
-vim.api.nvim_set_hl(0, "SpellLocal",    { fg = pink,                             underline = true })
-
 -- misc
 vim.api.nvim_set_hl(0, "SpecialKey",    { fg = pink })
 vim.api.nvim_set_hl(0, "Title",         { fg = aqua })
@@ -89,7 +81,7 @@ vim.api.nvim_set_hl(0, "Directory",     { fg = aqua })
 
 -- diff
 vim.api.nvim_set_hl(0, "DiffAdd",       { fg = addfg,      bg = addbg })
-vim.api.nvim_set_hl(0, "DiffDelete",    { fg = black,      bg = delbg })
+vim.api.nvim_set_hl(0, "DiffDelete",    { fg = white,      bg = delbg })
 vim.api.nvim_set_hl(0, "DiffChange",    { fg = changefg,   bg = changebg })
 vim.api.nvim_set_hl(0, "DiffText",      { fg = white,      bg = darkblue })
 
@@ -168,19 +160,6 @@ vim.api.nvim_set_hl(0, "@lsp.type.enum.cpp", {link = "Structure"})
 vim.api.nvim_set_hl(0, "@lsp.typemod.function.defaultLibrary", { fg = greenish })
 vim.api.nvim_set_hl(0, "LspInlayHint",            { fg = grey, italic = true})
 
--- c
-vim.api.nvim_set_hl(0, "cLabel",                      { fg = pink })
-vim.api.nvim_set_hl(0, "cStructure",                  { fg = aqua })
-vim.api.nvim_set_hl(0, "cStorageClass",               { fg = pink })
-vim.api.nvim_set_hl(0, "cInclude",                    { fg = pink })
-vim.api.nvim_set_hl(0, "cDefine",                     { fg = pink })
-vim.api.nvim_set_hl(0, "cSpecial",                    { fg = purple })
--- we use lsp for errors so disable basic syntax error from vim
-vim.api.nvim_set_hl(0, "cError", {link = "None"})
-
-vim.api.nvim_set_hl(0, "cppModifier",					{ fg = pink })
-vim.api.nvim_set_hl(0, "cppStructure",				{ fg = pink })
-
 -- vulkan
 vim.api.nvim_set_hl(0, "vkFunction",					{ fg = greenish})
 vim.api.nvim_set_hl(0, "vkType",                      { fg = greenishblue})
@@ -211,18 +190,50 @@ vim.api.nvim_set_hl(0, "IblWhitespace",    { fg = darkgrey})
 vim.api.nvim_set_hl(0, "IblScope", { fg = darkgrey})
 
 
-vim.api.nvim_set_hl(0, "NeogitDiffAdd", { bg = addbg})
-vim.api.nvim_set_hl(0, "NeogitDiffDelete", { bg = delbg})
-
-
 vim.api.nvim_set_hl(0, "DiagnosticError", { fg = red})
 vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = orange})
 vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = aqua})
 vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = green})
 
-vim.api.nvim_set_hl(0, "NoiceCmdlineIcon", {fg = aqua})
-vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorder", {fg = aqua})
-vim.api.nvim_set_hl(0, "NoiceCmdlinePopupTitle", {fg = aqua})
-vim.api.nvim_set_hl(0, "NoiceConfirmBorder", {fg = aqua})
-vim.api.nvim_set_hl(0, "NoiceCmdlineIconSearch", {fg = orange})
-vim.api.nvim_set_hl(0, "NoiceCmdlinePopupBorderSearch", {fg = orange})
+-- Markdown Headers (regular and treesitter)
+vim.api.nvim_set_hl(0, "markdownH1", { fg = br_yellow, bold = true })
+vim.api.nvim_set_hl(0, "markdownH2", { fg = aqua, bold = true })
+vim.api.nvim_set_hl(0, "markdownH3", { fg = green, bold = true })
+vim.api.nvim_set_hl(0, "markdownH4", { fg = orange, bold = true })
+vim.api.nvim_set_hl(0, "markdownH5", { fg = purple, bold = true })
+vim.api.nvim_set_hl(0, "markdownH6", { fg = br_cyan, bold = true })
+
+-- Treesitter markdown heading links
+-- Generic heading (when specific level is not determined)
+vim.api.nvim_set_hl(0, "@markup.heading", { fg = pink, bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.1.markdown", { link = "markdownH1" })
+vim.api.nvim_set_hl(0, "@markup.heading.2.markdown", { link = "markdownH2" })
+vim.api.nvim_set_hl(0, "@markup.heading.3.markdown", { link = "markdownH3" })
+vim.api.nvim_set_hl(0, "@markup.heading.4.markdown", { link = "markdownH4" })
+vim.api.nvim_set_hl(0, "@markup.heading.5.markdown", { link = "markdownH5" })
+vim.api.nvim_set_hl(0, "@markup.heading.6.markdown", { link = "markdownH6" })
+
+-- Basic markup
+vim.api.nvim_set_hl(0, "@markup", { link = "Normal" })
+vim.api.nvim_set_hl(0, "@markup.strong", { fg = white, bold = true })
+vim.api.nvim_set_hl(0, "@markup.italic", { fg = white2, italic = true })
+vim.api.nvim_set_hl(0, "@markup.strikethrough", { fg = grey, strikethrough = true })
+vim.api.nvim_set_hl(0, "@markup.underline", { fg = white, underline = true })
+
+
+-- Special elements
+vim.api.nvim_set_hl(0, "@markup.math", { fg = purple })
+vim.api.nvim_set_hl(0, "@markup.quote", { fg = green, italic = true })
+vim.api.nvim_set_hl(0, "@markup.environment", { fg = aqua })
+vim.api.nvim_set_hl(0, "@markup.environment.name", { fg = aqua, bold = true })
+
+-- Links
+vim.api.nvim_set_hl(0, "@markup.link", { fg = br_blue, underline = true })
+vim.api.nvim_set_hl(0, "@markup.link.label", { fg = br_purple })
+vim.api.nvim_set_hl(0, "@markup.link.url", { fg = br_blue, underline = true })
+
+
+-- Lists
+vim.api.nvim_set_hl(0, "@markup.list", { fg = orange })
+vim.api.nvim_set_hl(0, "@markup.list.checked", { fg = greenish })
+vim.api.nvim_set_hl(0, "@markup.list.unchecked", { fg = grey })

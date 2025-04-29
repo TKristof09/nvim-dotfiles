@@ -10,7 +10,7 @@ o.shiftwidth = 4
 o.smartindent = true
 o.expandtab = true -- replace tab with spaces
 o.wrap = true
---o.backspace = "indent, eol, start" -- check
+-- o.backspace = "indent, eol, start" -- check
 o.belloff = "all"
 o.encoding = "utf-8"
 o.fileencoding = "utf-8"
@@ -49,7 +49,7 @@ o.showtabline = 0
 o.showmode = false -- we use lualine for this, so disablig it makes noice only show macro recording in the statusline
 o.tildeop = true
 
-o.cmdheight = 0
+-- o.cmdheight = 0
 
 
 if vim.fn.has("win32") == 1 then
@@ -58,16 +58,3 @@ if vim.fn.has("win32") == 1 then
     o.shellquote = ""
     o.shellxquote = ""
 end
-
--- disable background color erase
-vim.cmd [[
-    if $term == "xterm-kitty"
-	  let &t_ut=''
-	  set termguicolors
-				let &t_8f = "\e[38;2;%lu;%lu;%lum"
-				let &t_8b = "\e[48;2;%lu;%lu;%lum"
-		hi normal guifg=none guibg=none ctermfg=none ctermbg=none
-		let &t_ti = &t_ti . "\033]10;#f6f3e8\007\033]11;#242424\007"
-		let &t_te = &t_te . "\033]110\007\033]111\007"
-	endif
-    ]]

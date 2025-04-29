@@ -4,8 +4,7 @@ vim.g.maplocalleader = " "
 
 local function get_opts(overrides)
     local opts = { noremap = true, silent = true }
-    local overrides = overrides or {}
-    return vim.tbl_extend("force", opts, overrides)
+    return vim.tbl_extend("force", opts, overrides or {})
 end
 
 vim.keymap.set("v", "p", '"_dP', get_opts()) -- make pasting not yank the text under selection in virtual mode
