@@ -11,7 +11,7 @@ return {
         lazy = true,
         event = "VeryLazy",
 
-        version = 'v0.*',
+        version = '1.*',
         opts = {
             keymap = {
                 preset = "none",

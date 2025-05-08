@@ -49,6 +49,7 @@ o.showtabline = 0
 o.showmode = false -- we use lualine for this, so disablig it makes noice only show macro recording in the statusline
 o.tildeop = true
 
+vim.o.winborder = "single"
 -- o.cmdheight = 0
 
 

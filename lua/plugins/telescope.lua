@@ -18,7 +18,8 @@ return {
                         reverse_directories = false
                     }
                 },
-                dynamic_preview_title = true
+                dynamic_preview_title = true,
+                border = false
             },
             extensions = {
                 fzf = {
